@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      ul {
+        font-size: 0px;
+        list-style: none;
+        /* display: inline; */
+        vertical-align: middle;
+        /* overflow: auto; */
+        /* float: left; */
+      }
+      .item {
+        width: 100px;
+        height: 100px;
+        background: pink;
+        text-align: center;
+        line-height: 100px;
+        /* display: inline-block; */
+        font-size: 16px;
+        float: left;
+      }
+      .wrap {
+        background: #000;
+      }
+      .last{
+        width: 100px;
+        height: 100px;
+        background: red;
+        /* display: inline-block; */
+        vertical-align: middle;
+      }
+      /* .clearfix::after{
+        content: '';
+        display: block;
+        clear: both;
+      } */
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <ul class="clearfix">
+        <li class="item">1</li>
+        <li class="item">2</li>
+        <li class="item">3</li>
+        <li class="item">4</li>
+        <!-- <li style="clear: both;"></li> -->
+      </ul>
+      <div class="last">s</div>
+    </div>
+  </body>
+</html>
