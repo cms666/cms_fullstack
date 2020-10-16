@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.bootcdn.net/ajax/libs/weui/2.3.0/style/weui.min.css" rel="stylesheet">
+
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- 展示一个用户列表怎么做？ -->
+    <script src="/user.js"></script>
+    <div class="weui-cells wp-users">
+    
+    </div>
+    <script>
+      const usersEle = document.querySelector('.wp-users')
+      fetch("/User.json")
+        .then((data) => data.json())
+        .then((data) => {
+          for( let user of data){
+            usersEle.innerHTML+=getUserTamplate(user)
+          }
+        });
+    </script>
+  </body>
+</html>
