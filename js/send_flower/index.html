@@ -1,61 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <script>
-    //对象 数据类型
-    //描述性极强的语言
-    //对象字面量
-    class Flower{
-
-    }
-    const lyb={
-      name: '刘杨宝',
-      sex: '男',  //属性 字符串常量
-      isSingle: true,  //boolean
-      hometown:'赣州',
-      age: 20,  //数值型
-      //symbol   
-      job_city: undefined,      //未定义
-      girl: null,  //为空
-      hobbies: ['游戏','代码'],
-      sendFlower: function(receiver){  //功能
-        // 送花的对象
-        //花的实例  11
-        let flower = new Flower('红玫瑰',11);
-        //送花
-        //talk in js
-        receiver.receiveFlower(lyb,flower);
-      },
-    }
-    const xm = {
-      name: '小美',
-      receiveFlower: function(){
-        console.log('收到花');
-      }
-    }
-    const xh = {
-      name: '小红',
-      // 代理模式
-      hometown: '赣州',
-      receiveFlower: function(sender,flower){
-        if(sender.name=='刘杨宝'){
-          // console.log('男神，还是我们在一起吧');
-          console.log('转送');
-
-          xm.receiveFlower(sender,flower);
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //对象 数据类型
+      //描述性极强的语言
+      //对象字面量
+      class Flower {
+        constructor(x, y) {
+          this.x = x;
+          this.y = y;
         }
-        else{
-          console.log('收到了花');
-        }
-      }
-    }
-    lyb.sendFlower(xh);
 
-  </script>
-</body>
+/*         toString() {
+          return "收到了" + this.y + "朵" + this.x ;
+        } */
+      }
+      const lyb = {
+        name: "刘杨宝",
+        sex: "男", //属性 字符串常量
+        isSingle: true, //boolean
+        hometown: "赣州",
+        age: 20, //数值型
+        //symbol
+        job_city: undefined, //未定义
+        girl: null, //为空
+        hobbies: ["游戏", "代码"],
+        sendFlower: function (receiver) {
+          //功能
+          // 送花的对象
+          //花的实例  11
+          let flower = new Flower("红玫瑰", 11);
+          //送花
+          //talk in js
+          receiver.receiveFlower(lyb, flower);
+        },
+      };
+      const xm = {
+        name: "小美",
+        receiveFlower: function (sender, flower) {
+          console.log("收到花");
+          //console.log(flower.toString());
+          console.log("又收到了" + flower.y + "朵" + flower.x );
+
+        },
+      };
+      const xh = {
+        name: "小红",
+        // 代理模式
+        hometown: "赣州",
+        receiveFlower: function (sender, flower) {
+          if (sender.name == "刘杨宝") {
+            // console.log('男神，还是我们在一起吧');
+            console.log("转送");
+
+            xm.receiveFlower(sender, flower);
+          } else {
+            console.log("收到了花");
+          }
+        },
+      };
+      lyb.sendFlower(xh);
+    </script>
+  </body>
 </html>

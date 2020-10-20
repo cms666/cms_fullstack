@@ -1,36 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>星球大战</title>
-  <style>
-    body{
-      background: url(./image/bg.jpg) ;
-    }
-    *{
-      margin: 0;
-      padding: 0;
-    }
-    .starwars-demo{
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 17em;
-      height: 34em;
-      transform: translate(-50%,-50%);
-      /* background-color:red; */
-    }
-  </style>
-</head>
-<body>
-  <!-- <div class="starwars-demo">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>星球大战</title>
+    <style>
+      body {
+        background: url(./image/bg.jpg);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .starwars-demo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 17em;
+        height: 34em;
+        transform: translate(-50%, -50%);
+        /* background-color:red; */
+        animation: mymove 5s infinite;
+        @keyframes mymove {
+          0% {
+            width: 0em;
+            height:0em;
+          }
+          20% {
+            width: 17em;
+            height: 34em;
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <div class="starwars-demo">
     <img src="./image/star.svg" class="star">
     <img src="./image/wars.svg" class="wars">
   </div> -->
-  <div class="starwars-demo">
-    <img src="./image/star.svg" alt="" class="star">
-    <img src="./image/wars.svg" alt="" class="wars">
-  </div>
-</body>
+    <div class="starwars-demo">
+      <img src="./image/star.svg" alt="" class="star" />
+      <img src="./image/wars.svg" alt="" class="wars" />
+    </div>
+  </body>
 </html>

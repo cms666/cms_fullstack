@@ -46,6 +46,22 @@
         color: #fff;
         /* color: var(--weui-WHITE); */
       }
+      .weui-btn_loading .weui-loading {
+        margin: -0.2em 0.34em 0 0;
+      }
+      .weui-loading {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        vertical-align: middle;
+        animation: weuiLoading 1s steps(12, end) infinite;
+        background: url('./loading.png');
+        background-size: 100%;
+      }
+      @keyframes weuiLoading {
+        0%{transform: rotate(0deg);}
+        100%{transform: rotate(360deg);}
+      }
     </style>
   </head>
   <body>

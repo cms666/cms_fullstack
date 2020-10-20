@@ -39,4 +39,4 @@ Coffee.prototype.addCondiments = function() {
 }
 var coffee = new Coffee()
 coffee.init()
-console.log(coffee.__proto__);
+console.log(Coffee);
