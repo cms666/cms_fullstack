@@ -54,5 +54,5 @@ a {
 }
 input,
 textarea {
-  caret-color: $weuiColorPrimary;
+  caret-color: var(--weui-BRAND);
 }
