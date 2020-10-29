@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  /* 兄弟之间 */
+  li+li::before{
+    content: "|";
+  }
+  /* ~  选择后面同级所有 */
+  li:nth-child(2)~li{  
+    color: red;
+  }
+</style>
+<body>
+  <ul>
+    <li>miui</li>
+    <li>iot</li>
+    <li>mi</li>
+  </ul>
+</body>
+</html>
