@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- <script>
+      // function foo() {
+      //   var a = 123;
+      //   console.log(a);
+      // }
+      // foo();
+
+      //eval()  欺骗词法作用域
+    </script>
+    <script>
+      //with 操作
+      var obj = {
+        a: 1,
+        b: 2,
+        c: 3,
+      };
+      with (obj) {
+        (a = 2), (b = 3), (c = 4);
+      }
+    </script> -->
+    <script>
+      function foo(a) {
+        var b = 2
+        return function bar() {
+          console.log(4);
+        }
+        var c = 3
+      }
+      console.log(foo())
+      
+    </script>
+  </body>
+</html>
