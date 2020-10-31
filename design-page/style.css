@@ -329,3 +329,20 @@
   text-align: center;
   color: white;
 }
+.body5{
+  width: 100%;
+	height: 754px;
+  background-color: #f6f5f3;
+  text-align: center;
+  overflow: hidden;
+}
+.body5 .title1{
+  margin-top: 100px;
+	font-family: Exo-Medium;
+	font-size: 16px;
+	font-weight: normal;
+	font-stretch: normal;
+	line-height: 50px;
+	letter-spacing: 3px;
+	color: #ff6d6d;
+}
