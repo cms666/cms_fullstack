@@ -346,3 +346,32 @@
 	letter-spacing: 3px;
 	color: #ff6d6d;
 }
+.body5 .title2{
+  margin-top: 15px;
+  font-family: Exo-Medium;
+	font-size: 40px;
+	font-weight: normal;
+	font-stretch: normal;
+	line-height: 50px;
+	letter-spacing: 2px;
+	color: #282828;
+}
+.body5 .desc{
+  margin: 48px auto 0;
+  width: 650px;
+	font-family: Exo-Medium;
+	font-size: 16px;
+	font-weight: normal;
+	font-stretch: normal;
+	line-height: 26px;
+	color: #282828;
+  opacity: 0.66;
+  
+}
+.body5 .img{
+  margin-top: 93px;
+}
+.body5 .img img{
+  width: 820px;
+	height: 375px;
+}
