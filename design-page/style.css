@@ -528,6 +528,70 @@
 	color: #282828;
 	opacity: 0.66;
 }
+.footer .left .two .san .title{
+  margin-top: 90px;
+  font-family: Exo-Medium;
+	font-size: 22px;
+	font-weight: normal;
+	font-stretch: normal;
+	letter-spacing: 1px;
+	color: #282828;
+}
+.footer .left .two .san .input{
+
+  width: 236px;
+	height: 49px;
+	background-color: #f6f5f3;
+	border-radius: 3px;
+	border: solid 1px #4e4e5e;
+  display: flex;
+  align-items: center;
+  padding-left: 29px;
+  border-right: none;
+}
+.footer .left .two .san .input input{
+  font-family: Exo-Regular;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  background-color: #f6f5f3;
+	font-weight: normal;
+  font-stretch: normal;
+  opacity: 0.6;
+	color: #000000;  
+}
+.footer .left .two .san  .fd{
+  display: flex;
+  margin-top: 30px;
+}
+.footer .left .two .san button{
+  width: 52px;
+	height: 49px;
+	background-color: #ff6d6d;
+	box-shadow: 0px 3px 3px 0px 
+		rgba(14, 15, 15, 0.25);
+	border-radius: 3px;
+	border: solid 1px #ff6d6d;
+}
+.footer .left .two .san .icon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 19px;
+  height: 21px;
+	opacity: 0.5;
+}
+.footer .left .two .san .icon .null{
+  flex:2
+}
+.footer .left .two .san .icon .one{
+  flex:1;
+}
+.footer .left .two .san .icon .one{
+  width: 20px;
+	height: 21px;
+}
+
 .footer .right{
   flex:1
 }
