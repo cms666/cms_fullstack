@@ -491,6 +491,43 @@
 .footer .left .two{
   flex:2;
 }
+.footer .left .two .yi .img{
+  margin-top: 84px;
+  width: 103px;
+  height: 47px;
+  background:url(./image/logo.png) no-repeat;
+}
+.footer .left .two .yi .desc{
+  margin-top: 12px;
+  width: 235px;
+	font-family: Exo-Medium;
+	font-size: 14px;
+	font-weight: normal;
+	font-stretch: normal;
+	line-height: 26px;
+	color: #282828;
+	opacity: 0.56;
+}
+.footer .left .one .er .title{
+  margin-top: 90px;
+  font-family: Exo-Medium;
+	font-size: 22px;
+	font-weight: normal;
+	font-stretch: normal;
+	letter-spacing: 1px;
+	color: #282828;
+}
+.footer .left .one .er .desc{
+  margin-top: 19px;
+  width: 95px;
+	font-family: Exo-Regular;
+	font-size: 14px;
+	font-weight: normal;
+	font-stretch: normal;
+	line-height: 30px;
+	color: #282828;
+	opacity: 0.66;
+}
 .footer .right{
   flex:1
 }
