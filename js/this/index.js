@@ -16,7 +16,7 @@ speak.call(me)
  */
 
 
-function foo() {
+/* function foo() {
   let person = {
     name: "wn",
   };
@@ -28,7 +28,7 @@ function bar() {
   };
   foo();
 }
-bar();
+bar(); */
 
 /* function foo(){
   console.log(this.a);
@@ -66,12 +66,18 @@ var bar = obj.foo  //引用
 var a = 'hello'
 bar() */
 
-/* function foo(){
+
+
+var a =2
+function foo(){
+  var a =4
   console.log(this.a);
 }
 var obj= {
   a:3,
-  foo:foo()   //引用    隐式绑定
+  foo:foo()
 }
-obj.foo  //引用 */
+
+foo()
+obj.foo  //引用
 

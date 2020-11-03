@@ -1,17 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <script>
-    "use strict"
-    function foo(){
-      console.log(this);
-    }
-    foo()
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // "use strict"
+      // function foo(){
+      //   console.log(this);
+      // }
+      // foo()
+
+
+      //?????
+      function foo() {
+        var a = 4;
+        console.log(this.a);
+      }
+      var obj = {
+        a: 3,
+        foo: console.log(this.a),
+      };
+
+      var a = 2
+      obj.foo;
+    </script>
+  </body>
 </html>
