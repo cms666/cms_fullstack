@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+<!--     <script>
+      //构造函数的三部曲  new
+      function Person() {
+        // var this ={
+        //   __proto__:Person.prototype
+        // }
+        // return this
+        name: "wn";
+      }
+      var person = new Person();
+      console.log(person);
+
+      //相当于var obj = new Object()
+      var obj = {
+        name: "蜗牛",
+      };
+      person.__proto__ = obj;
+      console.log(person.name); //蜗牛
+      //__proto__指向谁，就找谁的属性
+    </script>
+ -->
+    <script>
+      // 深浅拷贝
+      /*       var a = 1
+      var b = a
+      a =2 */
+
+      //Person.prototype.name = 'wn'   //深拷贝
+      function Person(){
+
+      }
+      var person = new Person()
+      //Person.prototype.name = '蜗牛'
+      Person.prototype={   //浅拷贝
+        name:'蜗牛'
+      }
+      console.log(person.name);
+    </script>
+  </body>
+</html>
