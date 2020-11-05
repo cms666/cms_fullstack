@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function Person() {}
+      var person = new Person();
+      // console.log(person);
+      //__prorto__用来找原型
+
+      function Grand() {}
+      var grand = new Grand(
+
+      );
+      function Father() {
+        this.name='zhangsan',
+        this.fortune ={
+          card:'visa'
+        }
+      }
+      var father = new Father();
+      Son.prototype=father
+      function Son() {
+        this.hobby='reading'
+      }
+      var son = new Son();
+      // console.log(son.name);
+      son.fortune.card2 = 'master'
+      console.log(son);//没有fortune
+      console.log(father); //原型改了  引用类型
+    </script>
+  </body>
+</html>
