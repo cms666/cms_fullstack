@@ -31,6 +31,10 @@ a:visited {
   color: #669;
   text-decoration: none;
 }
+a:link {
+  color: #37a;
+  text-decoration: none;
+}
 body {
   margin-top: 30px;
 }
@@ -52,6 +56,29 @@ input {
 .wrapper {
   width: 950px;
   margin: 0 auto;
+}
+#anony-reg-new .wrapper .login,
+#anony-reg-new .wrapper .app {
+  z-index: 2;
+}
+element.style {
+  height: 300px;
+  width: 300px;
+}
+#anony-reg-new .lnk-app:link,
+#anony-reg-new .lnk-app:visited,
+#anony-reg-new .lnk-app:hover,
+#anony-reg-new .lnk-app:active {
+  background: #00b51d;
+  color: #fff;
+}
+a img {
+  border-width: 0;
+  vertical-align: middle;
+}
+fieldset,
+img {
+  border: 0;
 }
 #anony-nav {
   width: 1080px;
@@ -183,7 +210,7 @@ input {
   overflow: visible;
   zoom: 1;
 }
-#anony-reg-new .wrapper :before {
+#anony-reg-new .wrapper:before {
   content: "";
   position: absolute;
   top: 0;
@@ -193,4 +220,84 @@ input {
   z-index: 0;
   background-repeat: no-repeat;
   background-position: 0 -150px;
+}
+#anony-reg-new .wrapper:after {
+  content: '\0020';
+  display: block;
+  clear: both;
+}
+#anony-reg-new .wrapper .login {
+  position: relative;
+}
+#anony-reg-new .login {
+  width: 300px;
+  float: right;
+  font-size: 0;
+  letter-spacing: -0.31em;
+}
+#anony-reg-new .app {
+  position: absolute;
+  height: 120px;
+  top: 0;
+  bottom: 0;
+  margin: auto 0 auto 475px;
+}
+#anony-reg-new .app-title {
+  margin: 7px 0;
+  font-size: 25px;
+  color: #111;
+  line-height: 24px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+#anony-reg-new .app-title span {
+  color: #111;
+  margin-left: 10px;
+  font-weight: 100;
+}
+#anony-reg-new .app-slogin {
+  margin: 0 0 18px;
+  font-size: 0;
+  color: #111;
+}
+#anony-reg-new .app-slogin:after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+#anony-reg-new .lnk-app {
+  display: inline-block;
+  zoom: 1;
+  padding: 9px 21px;
+  margin-right: 2px;
+  vertical-align: top;
+  border-radius: 2px;
+  font-size: 12px;
+  line-height: 1;
+}
+#anony-reg-new .app-qr {
+  display: inline-block;
+  zoom: 1;
+  position: relative;
+}
+#anony-reg-new .lnk-qr {
+  display: inline-block;
+  zoom: 1;
+  border: 1px solid rgba(68,136,170,0.667) od;
+  border-radius: 2px;
+}
+#anony-reg-new .app-qr-expand {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 20px 20px 5px;
+  border-radius: 2px;
+  text-align: center;
+  font-size: 13px;
+  color: #666;
+  background: #fff;
+  line-height: 13px;
+  white-space: nowrap;
+  text-decoration: none;
 }
