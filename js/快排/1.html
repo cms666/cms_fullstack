@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function partition(arr, left, right) {
+        let i = left,
+          j = right;
+        let privt = arr[i];
+        while (i < j) {
+          //在右边找到小于基准值的数，
+          while (
+            Math.pow(arr[j][0], 2) + Math.pow(arr[j][1], 2) >=
+              Math.pow(arr[i][0], 2) + Math.pow(arr[i][1], 2) &&
+            i < j
+          ) {
+            j--;
+          }
+          arr[i] = arr[j];
+          //在左边找到大于基准值的数
+          while (
+            Math.pow(arr[i][0], 2) + Math.pow(arr[i][1], 2) <=
+              Math.pow(arr[i][0], 2) + Math.pow(arr[i][1], 2) &&
+            i < j
+          ) {
+            i++;
+          }
+          arr[j] = arr[i];
+        }
+        arr[i] = privt;
+        return i;
+      }
+      var kClosest = function (points, K) {
+        let left = 0,
+          right = points.length - 1;
+        let target = k;
+        let i = partition(points, left, right);
+        while (i !== target) {
+          if (i < target) {
+            left = i + 1;
+          } else {
+            right = i - 1;
+          }
+          i = partition(points, left, right);
+        }
+        points.splice(target);
+        return points;
+      };
+    </script>
+  </body>
+</html>
