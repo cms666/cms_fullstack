@@ -14,13 +14,8 @@ export default {
   },
   computed: {
     iconCls() {
-      const classMap = [
-        "decrease",
-        "descount",
-        "special",
-        "invaice",
-        "guarabted",
-      ];
+      const classMap = ['decrease','discount','special','invoice','guarantee']
+
       return `icon-${this.size} ${classMap[this.type]}`;
     },
   },

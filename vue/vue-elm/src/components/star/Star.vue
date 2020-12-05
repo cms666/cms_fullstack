@@ -1,7 +1,7 @@
 <template>
-  <div class="star">
-    <span class="star-item on" v-for="index in parseInt(score)" :key="index"></span>
-    <span class="star-item off" v-for="index in 5-parseInt(score)" :key="index"></span>
+  <div class="star" v-if="score>=0">
+    <span class="star-item on"  v-for="index in parseInt(score)" :key="index+1"></span>
+   <span class="star-item off" v-for="index in 5-parseInt(score)" :key="index"></span> 
   </div>
 </template>
 
