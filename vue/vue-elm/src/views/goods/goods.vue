@@ -37,6 +37,10 @@
                     <span class="now">￥{{food.price}}</span>
                     <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                   </div>
+                  <!-- + -->
+                  <div class="cartcontrol-wrapper">
+                    <CartControl :food="food"/>
+                  </div>
                 </div>
               </li>
             </ul>
@@ -45,6 +49,7 @@
       </div>
     </div>
     <!-- 购物车 -->
+    <ShopCart/>
   </div>
 </template>
 
@@ -52,6 +57,8 @@
 import SupportIco from "../../components/support.ico/support-ico";
 import BScroll from 'better-scroll'
 import { getGoods } from "@/api/index";
+import ShopCart from '../../components/shop-cart/Shop-cart'
+import CartControl from '../../components/cart-control/cart-control'
 export default {
   data () {
     return {
@@ -105,7 +112,9 @@ export default {
     }
   },
   components: {
-    SupportIco
+    SupportIco,
+    ShopCart,
+    CartControl
   },
   computed: {
     currentIndex() {
@@ -117,6 +126,12 @@ export default {
         }
       }
       return 0
+    },
+    selectFoods(){
+      let foods=[]
+      // for(){
+
+      // }
     }
   }
 }
@@ -163,6 +178,7 @@ export default {
       display: flex;
       margin: 18px;
       padding-bottom: 18px;
+      position: relative;
       &:last-child
         padding-bottom: 0;
       .icon
@@ -199,5 +215,8 @@ export default {
             text-decoration line-through
             font-size 10px
             color rgb(147, 153, 159)
-
+        .cartcontrol-wrapper
+          position: absolute;
+          right: 0;
+          bottom: 12px;
 </style>
