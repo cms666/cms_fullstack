@@ -49,7 +49,7 @@
       </div>
     </div>
     <!-- 购物车 -->
-    <ShopCart/>
+    <ShopCart :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"/>
   </div>
 </template>
 
@@ -60,6 +60,11 @@ import { getGoods } from "@/api/index";
 import ShopCart from '../../components/shop-cart/Shop-cart'
 import CartControl from '../../components/cart-control/cart-control'
 export default {
+  props:{
+    seller:{
+      type:Object
+    }
+  },
   data () {
     return {
       goods: [],
@@ -129,9 +134,16 @@ export default {
     },
     selectFoods(){
       let foods=[]
-      // for(){
-
-      // }
+      for(let good of this.goods){
+        if(good.foods){
+          for(let food of good.foods){
+            if(food.count){
+              foods.push(food)
+            }
+          }
+        }
+      }
+      return foods
     }
   }
 }
