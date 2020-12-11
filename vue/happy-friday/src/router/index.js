@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 
 
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -15,6 +16,11 @@ const routes = [
     path:'/item',
     name:'item',
     component:()=>import('../views/item')
+  },
+  {
+    path:'/score',
+    name:'score',
+    component:()=>import('../views/score')
   }
 ]
 
