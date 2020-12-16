@@ -10,7 +10,7 @@ const routes = [
    name: 'starLogin',
    component: StarLogin,
    meta: {
-     title: 'login'
+     title: '登录'
    }
  },
  {
@@ -18,9 +18,25 @@ const routes = [
    name: 'register',
    component: () => import('@/views/register/Register'),
    meta: {
-     title: 'register'
+     title: '注册'
    }
- }
+ },
+ {
+  path: '/noteClass',
+  name: 'noteClass',
+  component: () => import('@/views/noteClass/index'),
+  meta: {
+    title: '笔记分类'
+  },
+},
+{
+  path: '/noteList',
+  name: 'noteList',
+  component: () => import('@/views/noteList/index'),
+  meta: {
+    title: '笔记列表'
+  },
+}
 ]
 
 const router = new VueRouter({

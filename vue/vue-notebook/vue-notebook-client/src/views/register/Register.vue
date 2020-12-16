@@ -51,7 +51,7 @@ export default {
       }
       this.$http({
         method: 'post',
-        url: this.$util.baseUrl + 'users/userLogin',
+        url: this.$util.baseUrl + 'users/userRegister',
         data: {
           nickname: this.nickname.trim(),
           username: this.username.trim(),
@@ -59,6 +59,11 @@ export default {
         }
       }).then(res => {
         console.log(res);
+        if(res.data.code == '80000'){
+          this.$router.push('starLogin')
+        }else{
+          this.$toast(res.data.mess)
+        }
       })
     },
     login() {
