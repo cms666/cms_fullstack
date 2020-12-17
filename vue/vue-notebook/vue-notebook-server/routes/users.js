@@ -29,28 +29,28 @@ router.post("/userRegister", async (ctx, next) => {
     if (!res.length) {
       await userService.insertUser(value).then((res1) => {
         console.log(res1);
-        let r = ''
-        if(res1.affectedRows!=0){
-          r='ok'
-          ctx.body={
-            code:'80000',
-            data:r,
-            mess:'注册成功'
-          }
-        }else{
-          r='error'
-          ctx.body={
-            code:'80004',
-            data:r,
-            mess:'注册失败'
-          }
+        let r = "";
+        if (res1.affectedRows != 0) {
+          r = "ok";
+          ctx.body = {
+            code: "80000",
+            data: r,
+            mess: "注册成功",
+          };
+        } else {
+          r = "error";
+          ctx.body = {
+            code: "80004",
+            data: r,
+            mess: "注册失败",
+          };
         }
       });
     } else {
-      ctx.body={
-        code:'80003',
-        mess:'用户名已存在'
-      }
+      ctx.body = {
+        code: "80003",
+        mess: "用户名已存在",
+      };
     }
   });
 });
@@ -87,7 +87,7 @@ router.post("/userLogin", async (ctx, next) => {
         };
       }
     })
-    .catch((err) => {
+    .catch((error) => {
       ctx.body = {
         code: "80002",
         data: error,
@@ -96,16 +96,48 @@ router.post("/userLogin", async (ctx, next) => {
 });
 
 //
-router.post('/findNoteListByType',async (ctx, next)=>{
-  let note_type = ctx.request.body.note_type
+router.post("/findNoteListByType", async (ctx, next) => {
+  let note_type = ctx.request.body.note_type;
   // console.log(note_type);
-  await userService.findNoteListByType(note_type).then(res=>{
+  await userService.findNoteListByType(note_type).then((res) => {
     // console.log(res);
-    ctx.body={
-      code: '80000',
-      data: res
+    if (res.length) {
+      let r = "ok";
+      ctx.body = {
+        code: "80000",
+        data: res,
+        mess: "查找成功",
+      };
+    } else {
+      let r = "error";
+      ctx.body = {
+        code: "80001",
+        mess: "暂无数据",
+      };
     }
-  })
-})
+  });
+});
+
+router.post("/findNoteDetail", async (ctx, next) => {
+  let note_id = ctx.request.body.note_id;
+  // console.log(note_type);
+  await userService.findNoteDetail(note_id).then((res) => {
+    // console.log(res);
+    if (res.length) {
+      let r = "ok";
+      ctx.body = {
+        code: "80000",
+        data: res[0],
+        mess: "查找成功",
+      };
+    } else {
+      let r = "error";
+      ctx.body = {
+        code: "80004",
+        mess: "暂无数据",
+      };
+    }
+  });
+});
 
 module.exports = router;

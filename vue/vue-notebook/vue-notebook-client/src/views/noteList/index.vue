@@ -1,12 +1,12 @@
 <template>
   <div class="note-list">
     <ul>
-      <li>
+      <li v-for="item of noteList" :key="item.id" @click="noteDetail(item.id)">
         <div class="img">
-          <img src="" alt="" />
+          <img :src="item.head_img" alt="" />
         </div>
-        <p class="time">2020/12/16</p>
-        <p class="title">好吃的</p>
+        <p class="time">{{item.c_time}}</p>
+        <p class="title">{{item.title}}</p>
       </li>
     </ul>
   </div>
@@ -16,7 +16,7 @@
 export default {
   data(){
     return{
-
+      noteList:[]
     }
   },
   created(){
@@ -32,8 +32,17 @@ export default {
           note_type:note_type
         }
       }).then(res=>{
-        console.log(res);
+        if(res.data.code=='80000'){
+          console.log(res.data.data);
+          this.noteList=res.data.data
+        }else{
+          this.$toast(res.data.mess)
+        }
+        
       })
+    },
+    noteDetail(id){
+      this.$router.push({path:'/noteDetail',query:{id:id}})
     }
   }
 };
@@ -42,6 +51,7 @@ export default {
 <style lang="less" scoped>
 .note-list {
   width: 100vw;
+  box-sizing: border-box;
   padding: 1.066667rem 0.666667rem 0;
   ul {
     display: flex;

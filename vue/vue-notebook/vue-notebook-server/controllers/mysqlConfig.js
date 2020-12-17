@@ -54,11 +54,16 @@ let findNoteListByType = function(noteType){
   return allServices.query(_sql)
 }
 
+let findNoteDetail= function(id){
+  let _sql = `select * from note where id="${id}"`
+  return allServices.query(_sql)
+}
 
 module.exports = {
   userLogin,
   findUser,
   insertUser,
-  findNoteListByType
+  findNoteListByType,
+  findNoteDetail
 }
 
