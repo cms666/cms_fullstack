@@ -1,5 +1,6 @@
 const router = require("koa-router")();
 const userService = require("../controllers/mysqlConfig");
+const date = require('../controllers/util')
 
 router.prefix("/users");
 
@@ -54,6 +55,37 @@ router.post("/userRegister", async (ctx, next) => {
     }
   });
 });
+
+//插入笔记
+router.post("/insertNote", async (ctx, next) => {
+  let userId = ctx.request.body.userId
+  let title = ctx.request.body.title
+  let note_type = ctx.request.body.note_type
+  let note_content = ctx.request.body.note_content
+  let c_time = date()
+  console.log(c_time);
+  let head_img = ctx.request.body.head_img
+  let nickname = ctx.request.body.nickname;
+  let value = [userId,title,note_type,note_content,c_time,head_img,nickname]
+  await userService.insertNote(value).then((res1) => {
+    let r = "";
+    if (res1.affectedRows != 0) {
+      r = "ok";
+      ctx.body = {
+        code: "80000",
+        data: r,
+        mess: "发布成功",
+      };
+    } else {
+      r = "error";
+      ctx.body = {
+        code: "80004",
+        data: r,
+        mess: "发布失败",
+      };
+    }
+  })
+})
 
 //登录
 router.post("/userLogin", async (ctx, next) => {

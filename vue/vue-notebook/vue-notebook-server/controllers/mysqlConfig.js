@@ -59,11 +59,17 @@ let findNoteDetail= function(id){
   return allServices.query(_sql)
 }
 
+let insertNote = function(value){
+  let _sql = `insert into note set useId=?,title=?,note_type=?,note_content=?,c_time=?,head_img=?,nickname=?`
+  return allServices.query(_sql,value)
+}
+
 module.exports = {
   userLogin,
   findUser,
   insertUser,
   findNoteListByType,
-  findNoteDetail
+  findNoteDetail,
+  insertNote
 }
 

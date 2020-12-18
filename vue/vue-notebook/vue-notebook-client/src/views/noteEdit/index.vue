@@ -1,10 +1,6 @@
 <template>
   <div class="publish-note">
-    <quill-editor
-      v-model="content"
-      ref="myQuillEditor"
-      :options="editorOption"
-    >
+    <quill-editor v-model="content" ref="myQuillEditor" :options="editorOption">
     </quill-editor>
 
     <div class="note-wrap">
@@ -14,12 +10,12 @@
       </div>
       <div class="note-title">
         <h2>上传图片</h2>
-        <van-uploader  multiple :max-count="2" :after-read="onRead" />
+        <van-uploader multiple :max-count="2" :after-read="onRead" />
         <!-- <img src="" class="preImg" alt=""> -->
       </div>
       <div class="note-title">
         <h2>请选择分类</h2>
-        <span class="note-type" @click="selectType">选择分类</span>
+        <span class="note-type" @click="selectType">{{ selectCon }}</span>
         <van-action-sheet
           v-model="show"
           :actions="actions"
@@ -41,14 +37,14 @@ import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
 
 import { quillEditor } from "vue-quill-editor";
-import { Toast } from 'vant';
+import { Toast } from "vant";
 export default {
   data() {
     return {
-      selectCon: '',
+      selectCon: "选择分类",
       content: "",
-      title: '',
-      preImg:'',
+      title: "",
+      preImg: "",
       editorOption: {
         modules: {
           toolbar: [
@@ -67,68 +63,73 @@ export default {
               // { indent: "-1" },
               // { indent: "+1" },
             ], // toggled buttons
-            ["blockquote"]
-          ]
-        }
+            ["blockquote"],
+          ],
+        },
       },
       fileList: [],
       show: false,
       actions: [
-        { name: '选项' }, 
-        { subname: '美食' }, 
-        { subname: '旅行' },
-        { subname: '汽车' },
-        { subname: '时尚' },
-        { subname: '科技' },
+        { name: "选项" },
+        { subname: "美食" },
+        { subname: "旅行" },
+        { subname: "汽车" },
+        { subname: "时尚" },
+        { subname: "科技" },
       ],
-    }
+    };
   },
   components: {
     quillEditor,
   },
   methods: {
     onCancel() {
-      Toast('取消');
+      Toast("取消");
     },
     selectType() {
-      this.show = true
+      this.show = true;
     },
     onRead(file) {
-     console.log(file); 
-     this.preImg=file.content
+      console.log(file);
+      this.preImg = file.content;
     },
-    onSelect(item){
-      this.selectCon= item.subname
+    onSelect(item) {
+      this.selectCon = item.subname;
     },
-    publish(){
-      let curUserId = JSON.parse(sessionStorage.getItem('userInfo')).id
-      let nickname = JSON.parse(sessionStorage.getItem('userInfo')).id
+    publish() {
+      let curUserId = JSON.parse(sessionStorage.getItem("userinfo")).id;
+      let nickname = JSON.parse(sessionStorage.getItem("userinfo")).nickname;
       this.$http({
-        method:'post',
-        url:this.$util.baseUrl + 'users/insertNote',
-        data:{
-          note_content:this.content,
-          head_img:this.preImg,
-          title:this.title,
-          note_type:this.selectCon,
+        method: "post",
+        url: this.$util.baseUrl + "users/insertNote",
+        data: {
+          note_content: this.content,
+          head_img: this.preImg,
+          title: this.title,
+          note_type: this.selectCon,
           userId: curUserId,
-          nickname:nickname
+          nickname: nickname,
+        },
+      }).then((res) => {
+        if (res.data.code == "80000") {
+          this.$toast(res.data.mess);
         }
-      }).then(res=>{
-        if(res.data.code=='80000'){
-          this.$toast(res.data.mess)
-        }
-      })
-    }
-  }
+      });
+    },
+  },
 };
 </script>
 
 <style lang="less">
-.van-uploader{
-  padding:10px 15px;
+.van-uploader {
+  box-sizing: border-box !important;
+
+  padding: 10px 15px;
   display: flex;
   align-items: center;
+}
+.publish-note {
+  box-sizing: border-box !important;
 }
 .ql-container {
   height: 6.666667rem;
@@ -140,10 +141,12 @@ export default {
     font-weight: 400;
     font-size: 0.373333rem;
     color: rgba(69, 90, 100, 0.6);
+    box-sizing: border-box !important;
+
     padding: 10px;
     background: #f5f5f5;
   }
-  .preImg{
+  .preImg {
     width: 100px;
     height: 100px;
     margin-left: 15px;
@@ -154,6 +157,8 @@ export default {
     font-size: 0.373333rem;
     color: #333;
     line-height: 24px;
+    box-sizing: border-box !important;
+
     padding: 10px 15px;
     position: relative;
     &::after {
