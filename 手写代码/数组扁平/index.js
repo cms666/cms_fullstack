@@ -20,6 +20,9 @@ console.log(falten(arr)); */
     return pre.concat(Array.isArray(next) ? falten(next):next)
   },[])
 } */
+
+
+//扩展运算符
 function falten(arr){
   while(arr.some(item => Array.isArray(item))){
     arr = [].concat(...arr)
