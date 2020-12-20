@@ -1,0 +1,23 @@
+/* miniprogram/pages/index/index.wxss */
+page{
+  padding: 0;
+  margin: 0;
+}
+.container{
+  width: 100%;
+  padding: 10rpx;
+}
+.container .item{
+  margin-top: 10rpx;
+  height: 150rpx;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 20rpx;
+  font-size: 40rpx;
+  font-weight: 500;
+  padding: 10rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 2rpx #616860;
+}

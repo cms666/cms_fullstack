@@ -1,0 +1,6 @@
+<!--miniprogram/pages/index/index.wxml-->
+<view class="container">
+<button class="item" wx:for="{{classify}}" bindtap="publish" data-classify="{{item}}" wx:key="index">
+    <text>找{{item}}</text><van-icon name="arrow" />
+</button>
+</view>
