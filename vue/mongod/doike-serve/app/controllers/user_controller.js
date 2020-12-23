@@ -58,7 +58,7 @@ const register = async (ctx)=>{
     account: req.username
   })
   if(user){
-    ctx.status =400 
+    ctx.status =200 
     ctx.body={
       code:0,
       msg:'账号已存在'
