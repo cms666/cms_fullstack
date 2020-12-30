@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*     let pre = 0
+    let wait = 2000
+    function onResize(){
+      let current = Date.now()
+      if(current-pre>wait)
+      console.log('请求');
+      pre=current
+    }
+    function onScroll(){
+      let current = Date.now()
+      if(current-pre>wait)
+      console.log('请求');
+      pre=current
+    } */
+      //高阶函数
+      function throttle(fn) {
+        let p = 0;
+        return function () {
+          let current = Date.now();
+          if (current - p > 2000) {
+            fn();
+            p = current;
+          }
+        };
+      }
+      function onResize() {
+        console.log("resize");
+      }
+      function onScroll() {
+        console.log("scroll");
+      }
+      let xxx = throttle(onResize);
+      window.addEventListener("resize", xxx);
+      window.addEventListener("scroll", throttle(onScroll));
+      //相同的：对某件事节流，共同的流程
+    </script>
+  </body>
+</html>
