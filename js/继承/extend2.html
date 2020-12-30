@@ -1,0 +1,21 @@
+<script>
+  //构造函数继承
+  function Parent(name) {
+    this.names = ["cms", "xxx"];
+    this.name = name
+  }
+  Parent.prototype.getName=function(){
+    console.log(123);
+  }
+  function Child(name) {
+    Parent.call(this,name);
+  }
+
+  let child = new Child();
+
+  child.name.push("df");
+  console.log(child);
+  let child1 = new Child();
+  console.log(child1);
+  // 避免了引用类型的属性被所有实例共享
+</script>

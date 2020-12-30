@@ -1,0 +1,16 @@
+<script>
+  //寄生式继承  (创建一个封装过程的函数，并不能解决原型式继承的问题)
+  function createObj(o){
+    let clone = Object.create(o)
+    clone.sayName = function(){
+      console.log('hi');
+    }
+    return clone
+  }
+  let person = {
+    name:'cms',
+    friends:['df','dff'],
+  }
+  let person1 = createObj(person)
+  let person2 = createObj(person)
+</script>

@@ -1,0 +1,15 @@
+<script>
+  //原型式继承
+  function createObj(o){
+    function F(){}
+    F.prototype = o
+    return new F()
+  }
+
+  let person = {
+    name:'cms',
+    friends:['df','dff'],
+  }
+  let person1 = createObj(person)
+  let person2 = createObj(person)
+</script>
