@@ -11,8 +11,8 @@ export default {
   setup(props) {
     let flag = props.data[0]
     let left = []
-    let right = []
-    props.data.slice(1).forEach(v => {
+    let right = [] 
+    props.data.slice(1).forEach(v => { 
       v > flag ? right.push(v) : left.push(v)
     });
     return { left, right, flag }
