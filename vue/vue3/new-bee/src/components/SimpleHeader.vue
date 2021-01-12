@@ -1,6 +1,7 @@
 <template>
   <header class="simple-header">
-    <van-icon name="arrow-left" @click="goBack"/>
+    <van-icon name="arrow-left" @click="goBack" v-if="back"/>
+    <i v-else>&nbsp;</i>
     <div class="simple-header-name">{{ name }}</div>
     <van-icon name="weapp-nav" />
   </header>
