@@ -28,6 +28,31 @@ const routes = [
     path: '/cart',
     name:'cart',
     component:() => import('../views/Cart')
+  },
+  {
+    path: '/create-order',
+    name:'create-order',
+    component:() => import('../views/CreateOrder')
+  },
+  {
+    path: '/address',
+    name:'address',
+    component:() => import('../views/Address')
+  },
+  {
+    path: '/address-edit',
+    name:'address-edit',
+    component:() => import('../views/AddressEdit')
+  },
+  {
+    path: '/user',
+    name:'user',
+    component:() => import('../views/User')
+  },
+  {
+    path: '/order',
+    name:'order',
+    component:() => import('../views/Order')
   }
 ]
 

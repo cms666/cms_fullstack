@@ -6,7 +6,7 @@
     ></s-header>
     <van-address-edit
       :area-list="areaList"
-      show-delete
+      :show-delete="type === 'edit'"
       show-set-default
       show-search-result
       :address-info="type === 'add' ? {} : addressInfo"
@@ -17,7 +17,6 @@
       @change-detail="onChangeDetail"
       @change-area="changeArea"
       ref="reset"
-      value="110101"
     />
   </div>
 </template>
@@ -26,7 +25,7 @@
 import sHeader from "@/components/SimpleHeader";
 import { onMounted, reactive, toRefs } from "vue";
 import { tdist } from "../common/js/utils";
-import { addAddress, editAddress } from "../service/address";
+import { addAddress, editAddress, deleteAddress } from "../service/address";
 import { Toast } from "vant";
 import { useRouter, useRoute } from "vue-router";
 import { getAddressDetail, getDefaultAddress } from "../service/address";
@@ -46,45 +45,59 @@ export default {
       },
       type: route.query.type,
       addressInfo: {},
-    
+      from: route.query.from,
+      addressId: "",
     });
 
     onMounted(async () => {
-      //
+      // 省市区列表构建
       let _province_list = {};
       let _city_list = {};
       let _county_list = {};
       tdist.getLev1().forEach((p) => {
         _province_list[p.id] = p.text;
+
         tdist.getLev2(p.id).forEach((c) => {
           _city_list[c.id] = c.text;
-          tdist.getLev3(c.id).forEach((c) => (_county_list[c.id] = c.text));
+
+          tdist.getLev3(c.id).forEach((q) => (_county_list[q.id] = q.text));
         });
       });
       state.areaList.province_list = _province_list;
       state.areaList.city_list = _city_list;
       state.areaList.county_list = _county_list;
-      if (state.type === "edit") {
-        const { data: address } = await getAddressDetail(route.query.addressId);
-        
-        console.log(address);
-        state.addressInfo.id = address.addressId;
-        state.addressInfo.name = address.userName;
-        state.addressInfo.tel = address.userPhone;
-        state.addressInfo.province = address.provinceName;
-        state.addressInfo.city = address.cityName;
-        state.addressInfo.county = address.regionName;
-        state.addressInfo.addressDetail = address.detailAddress;
-        let code = "";
-        for (let key in tdist) {
-          if (tdist[key][0] === address.regionName) {
-            code = key;
-          }
-        }
-        state.addressInfo.areaCode = code;
-        state.addressInfo.isDefault = Boolean(address.defaultFlag);
+
+      const { addressId, from, type } = route.query;
+      state.addressId = addressId;
+      state.type = type;
+      state.from = from || "";
+      if (type == "edit") {
+        const { data: addressDetail } = await getAddressDetail(addressId);
+        console.log(addressDetail);
+        let _areaCode = "";
+
+        const toCode = (area, code) => {
+          for (let key in tdist)
+            if (tdist[key][0] == area && tdist[key][1] == code) return key;
+        };
+        // 拿到省级code，利用省级code找到市级code，利用市级code找到区对应的code
+        let provinceCode = toCode(addressDetail.provinceName, "1"); // 1
+        let cityCode = toCode(addressDetail.cityName, provinceCode); // 110000
+        let regionCode = toCode(addressDetail.regionName, cityCode); // 231283  // 110104
+        _areaCode = regionCode;
+
+        state.addressInfo = {
+          id: addressDetail.addressId,
+          name: addressDetail.userName,
+          tel: addressDetail.userPhone,
+          province: addressDetail.provinceName,
+          city: addressDetail.cityName,
+          county: addressDetail.regionName,
+          addressDetail: addressDetail.detailAddress,
+          areaCode: _areaCode,
+          isDefault: !!addressDetail.defaultFlag,
+        };
       }
-      console.log(state.areaList);
     });
 
     const onSave = async (content) => {
@@ -99,26 +112,26 @@ export default {
       };
       //新增或修改
       console.log(content);
-  
-      const id =
-        (await state.type) === "add"
-          ? addAddress(params)
-          : ((params.addressId = route.query.addressId), editAddress(params));
-      console.log(id);
+
+      (await state.type) === "add"
+        ? addAddress(params)
+        : ((params.addressId = route.query.addressId), editAddress(params));
       Toast("保存成功");
       setTimeout(() => {
         router.back();
       }, 1000);
     };
-    const reset = () => {};
-    const changeArea = (e) => {
-      console.log(e);
+    const onDelete = async () => {
+      await deleteAddress(state.addressId);
+      Toast("删除成功");
+      setTimeout(() => {
+        router.back();
+      }, 1000);
     };
     return {
       ...toRefs(state),
       onSave,
-      changeArea,
-      reset,
+      onDelete,
     };
   },
 };

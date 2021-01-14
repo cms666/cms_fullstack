@@ -1,6 +1,6 @@
 <template>
   <div class="product-detail">
-    <s-header :name="'商品详情'" :back="'/home'"></s-header>
+    <s-header :name="'商品详情'"></s-header>
     <div class="detail-content">
       <div class="detail-swipe-wrap">
         <van-swipe class="my-swipe" indicator-color="#1baeae">
@@ -38,69 +38,78 @@
     <!-- footer -->
     <van-action-bar>
       <van-action-bar-icon icon="chat-o" text="客服" dot />
-      <van-action-bar-icon icon="cart-o" text="购物车" :badge="count ? count:''" @click="goTo" />
+      <van-action-bar-icon icon="cart-o" text="购物车" :badge="count ? count : ''" @click="goTo" />
       <van-action-bar-button type="warning" text="加入购物车" @click="handleAddCart"/>
-      <van-action-bar-button type="danger" text="立即购买" @click="goToCart" />
+      <van-action-bar-button type="danger" text="立即购买" @click="goToCart"/>
     </van-action-bar>
   </div>
 </template>
 
 <script>
 import sHeader from "@/components/SimpleHeader";
-import { computed, onMounted, reactive, toRefs } from "vue";
-import { useRoute,useRouter } from "vue-router";
-import {useStore} from 'vuex'
-import router from "../router";
-import { getDetail } from "../service/goods";
-import { addCart } from "../service/cart";
-import {Toast} from 'vant'
+import { computed, onMounted, reactive, toRefs } from 'vue';
+import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import { getDetail } from '@/service/goods.js'
+import { addCart } from '@/service/cart.js'
+import { Toast } from 'vant'
 export default {
   components: {
     sHeader,
   },
   setup() {
+    const route = useRoute()
+    const router = useRouter()
     const store = useStore()
-    const route = useRoute();
-    const router = useRouter();
     const state = reactive({
       detail: {
         goodsCarouselList: [],
-        goodsName: "",
-        sellingPrice: "",
-        goodsDetailContent: "",
-      },
-    });
-    
-    onMounted(async () => {
-      const { id } = route.params;
-      const { data } = await getDetail(id);
-      state.detail = data;
-      store.dispatch('updateCart')
-    });
+        goodsName: '',
+        sellingPrice: '',
+        goodsDetailContent: ''
+      }
+    })
 
-    //加入购物车
-    const handleAddCart = async() =>{
-      const {resultCode} = await addCart({goodsCount:1,goodsId:state.detail.goodsId})
-      if(resultCode === 200)  Toast.success('添加成功')
+    onMounted(async () => {
+      const { id } = route.params
+      const { data } = await getDetail(id)
+      // console.log(data);
+      state.detail = data
+      store.dispatch('updateCart')
+    })
+
+    // 加入购物车
+    const handleAddCart = async () => {
+      const { resultCode } = await addCart({ goodsCount: 1, goodsId: state.detail.goodsId})
+      if (resultCode == 200) Toast.success('添加成功')
       store.dispatch('updateCart')
     }
 
-    //角标
-    const count = computed(()=>{
+    // 角标
+    const count = computed(() => {
       return store.state.cartCount
     })
-    //立即购买
-    const goToCart = async() =>{
-      await addCart({goodsCount:1,goodsId:state.detail.goodsId})
+
+    // 立即购买
+    const goToCart = async () => {
+      await addCart({ goodsCount: 1, goodsId: state.detail.goodsId})
       store.dispatch('updateCart')
-      router.push({path:'/cart'})
+      router.push({ path: '/cart' })
     }
-    //去到购物车页面
-    const goTo = () =>{
-      router.push({path:'/cart'})
+
+    // 去到购物车页面
+    const goTo = () => {
+      router.push({ path: '/cart' })
     }
-    return { ...toRefs(state),handleAddCart, count,goToCart,goTo};
-  },
+
+    return {
+      ...toRefs(state),
+      handleAddCart,
+      count,
+      goToCart,
+      goTo
+    }
+  }
 };
 </script>
 

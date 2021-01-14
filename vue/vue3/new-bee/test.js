@@ -20,7 +20,7 @@
   return res;
 };
 console.log(findRelativeRanks([1, 2, 3, 4, 5])); */
-
+/* 
 var checkPerfectNumber = function(num) {
   let mid = Math.floor(num ** 0.5)
   let sum = 0
@@ -33,4 +33,34 @@ var checkPerfectNumber = function(num) {
   }
   return sum + 1 === num
 };
-console.log(checkPerfectNumber(28));
+console.log(checkPerfectNumber(28)); */
+
+var findRedundantConnection = function(edges) {
+  let map = new Map();
+  let arr = [];
+  for (let i = 0; i < edges.length; i++) {
+    let value1 = map.get(edges[i][0]);
+    let value2 = map.get(edges[i][1]);
+    console.log(value1,value2);
+    if (value1) {
+      map.set(edges[i][0], value1 + 1);
+    } else {
+      map.set(edges[i][0], 1);
+    }
+    if (value2) {
+      map.set(edges[i][1], value2 + 1);
+    } else {
+      map.set(edges[i][1], 1);
+    }
+    if (map.get(edges[i][0]) === 2 && map.get(edges[i][1]) === 2) arr.push(edges[i]);
+    console.log(map);
+  }
+  return arr[arr.length - 1];
+};
+console.log(
+  findRedundantConnection([
+    [1, 2],
+    [1, 3],
+    [2, 3],
+  ])
+);
