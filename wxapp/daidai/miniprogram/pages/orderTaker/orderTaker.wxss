@@ -1,1 +1,57 @@
 /* pages/orderTaker/orderTaker.wxss */
+/* pages/order/order.wxss */
+page{
+  margin: 0px;
+  padding: 0;
+  background-color: #f2f2f2;
+}
+.container{
+  width: 100%;
+}
+.container .item{
+  margin: 20rpx auto 0;
+  width: 90%;
+  padding: 16rpx;
+  background-color: #fff;
+  border-radius: 20rpx;
+  box-shadow: 0rpx 7rpx 20rpx #ececec;
+  transition: all .5s;
+}
+.desc{
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  font-size: 26rpx;
+}
+.tips,.header1{
+  font-size: 28rpx;
+}
+.price,.tip{
+  color: red;
+}
+.header1,.tips,.user{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.info image{
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+}
+.info text{
+  font-size: 28rpx;
+  margin-left: 20rpx;
+}
+text{
+  padding: 5rpx 0;
+}
+.receive{
+  background-color: rgb(230, 16, 16);
+  border-radius: 20rpx;
+  width: 80rpx;
+  color: #fff;
+  font-size: 27rpx;
+  text-align: center;
+  padding: 2rpx 0;
+}

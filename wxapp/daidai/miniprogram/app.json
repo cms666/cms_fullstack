@@ -5,18 +5,22 @@
     "pages/order/order",
     "pages/orderTaker/orderTaker",
     "pages/mine/mine",
-    "pages/publish/publish"
+    "pages/publish/publish",
+    "pages/orderDetail/orderDetail",
+    "pages/search/search",
+    "pages/myorder/myorder",
+    "pages/myorderReceive/myorderReceive"
   ],
   "window": {
-    "backgroundColor": "#F6F6F6",
+    "backgroundColor": "#F2F2F2",
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#F6F6F6",
+    "navigationBarBackgroundColor": "#1baeae",
     "navigationBarTitleText": "代代",
-    "navigationBarTextStyle": "black"
+    "navigationBarTextStyle": "white"
   },
   "tabBar": {
     "color": "#bfbfbf",
-    "selectedColor": "#000000",
+    "selectedColor": "#1baeae",
     "list": [
       {
         "pagePath": "pages/index/index",
@@ -50,5 +54,8 @@
       }
     ]
   },
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "useExtendedLib": {
+    "weui": true
+  }
 }

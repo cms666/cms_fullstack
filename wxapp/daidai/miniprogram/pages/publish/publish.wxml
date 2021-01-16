@@ -1,2 +1,40 @@
 <!--pages/publish/publish.wxml-->
-<text>pages/publish/publish.wxml</text>
+<view class="container">
+  <view class="classify">
+    <text>{{classify}}</text>
+  </view>
+  <view class="detail">
+    <van-cell-group class="custom-class">
+      <van-field value="{{ title }}" title-width="4em" label="标题" placeholder="请输入标题" border="{{ false }}"
+        bind:change="title" cursor="0" />
+      <van-field value="{{ desc }}" title-width="4em" label="详情" type="textarea" placeholder="请输入详情" autosize
+        border="{{ false }}" bind:change="desc" />
+      <van-field value="{{ price }}" title-width="4em" label="佣金￥" placeholder="请输入价格" border="{{ false }}"
+        bind:change="price" />
+      <van-field value="{{ phone }}" title-width="4em" label="联系方式" placeholder="请输入联系方式" border="{{ false }}"
+        bind:change="phone" />
+
+      <view bindtap="showPopup">
+        <van-field value="{{ time }}" title-width="4em" label="截止时间" placeholder="请选择时间" readonly="true"
+          border="{{ false }}" clickable="true" />
+      </view>
+    </van-cell-group>
+  </view>
+  <view hidden="{{showpublish}}">
+    <view class="button">
+      <van-button type="default" size="large" type="primary" color="#1baeae" round="true" bind:click="publish">发布</van-button>
+    </view>
+  </view>
+
+  <view hidden="{{showupdate}}">
+    <view class="button">
+      <van-button type="default" size="large" type="primary" color="#1baeae" round="true" bind:click="update">修改</van-button>
+    </view>
+  </view>
+
+</view>
+<van-popup show="{{ show }}" bind:close="onClose" position="bottom">
+  <van-datetime-picker type="datetime" value="{{ currentDate }}" min-date="{{ minDate }}" max-date="{{ maxDate }}"
+    bind:confirm="confirm" bind:cancel="cancel" bind:input="onInput" />
+</van-popup>
+<van-toast id="van-toast" />

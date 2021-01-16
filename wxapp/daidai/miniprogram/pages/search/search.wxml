@@ -1,0 +1,36 @@
+<!--pages/help/help.wxml-->
+<view class="container">
+  <view class="header">
+    <view class="search" hidden="{{refresh}}">
+      <van-search value="{{ value }}" placeholder="请输入搜索关键词" use-action-slot shape="round" bind:change="searchChange"
+        bind:search="onSearch">
+        <view slot="action" bind:tap="onClick">搜索</view>
+      </van-search>
+    </view>
+    <view class="classify">
+      <van-tabs active="{{ active }}" bind:change="classifyChange" color="#1baeae">
+        <block wx:for="{{classify}}" wx:key="index">
+          <van-tab title="{{item}}"></van-tab>
+        </block>
+      </van-tabs>
+    </view>
+  </view>
+  <view style="height:190rpx"></view>
+  <view class="item" wx:for="{{data}}" wx:key="id" data-id="{{item.id}}" bindtap="orderDetail">
+    <view class="user">
+      <view class="info">
+        <image src="{{item.avatar}}" /><text>{{item.nickname}}</text></view>
+      <view class="tag">
+        <van-tag color="#1baeae">{{item.classify}}</van-tag>
+      </view>
+    </view>
+    <view class="header1"><text class="title">{{item.title}}</text><text class="price">￥{{item.price}}</text></view>
+    <view class="desc"><text>{{item.desc}}</text></view>
+    <view class="tips"><text class="time">截止:{{item.time}}</text>
+      <view class="receive" catchtap="receive" data-id="{{item.id}}">接单</view>
+    </view>
+  </view>
+  
+</view>
+<van-toast id="van-toast" />
+<view class="refresh" hidden="{{refresh}}" bindtap="refresh"><image src="../../images/刷新.png"/></view>

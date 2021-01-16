@@ -5,14 +5,37 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    data:[]
   },
-
+  orderDetail(e){
+    wx.navigateTo({
+      url: `../orderDetail/orderDetail?id=${e.currentTarget.dataset.id}&item=接单`,
+    })
+  },
+  finish(e){
+    wx.showToast({
+      title: '成功',
+      icon: 'success',
+    })
+    let that = this
+    wx.cloud.callFunction({
+      name: 'updateOrder',
+      data: {
+        item: '确认完成',
+        id: e.currentTarget.dataset.id
+      }
+    }).then(res => {
+      wx.hideToast()
+      that.onShow()
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    wx.setNavigationBarTitle({
+      title: '接单'
+    })
   },
 
   /**
@@ -26,7 +49,23 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    const that = this
+    wx.showNavigationBarLoading()
+    wx.cloud.callFunction({
+      name:'orderTaking',
+      data:{
+        item:'接单'
+      },
+      success(res){
+        // console.log(res);
+        that.setData({
+          data:res.result
+        })
+      },
+      complete() {
+        wx.hideNavigationBarLoading()
+      }
+    })
   },
 
   /**

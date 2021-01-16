@@ -5,13 +5,194 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    active: 0,
+    classify: ['全部', '代课', '外卖', '快递', '代买', '打印', '其它',],
+    value: '',
+    allData: [],
+    data: [],
+    refresh: false,
+    scroll: 0
   },
+  onPageScroll: function (e) {
+    let that = this
+    if (e.scrollTop <= 0) {
+      e.scrollTop = 0;
+    } else if (e.scrollTop > wx.getSystemInfoSync().windowHeight) {
+      // console.log(wx.getSystemInfoSync().windowHeight);
+      // e.scrollTop = wx.getSystemInfoSync().windowHeight;
+    }
+    if (e.scrollTop > that.data.scroll) {
+      that.setData({
+        refresh: true
+      })
+    } 
+    if(e.scrollTop < that.data.scroll) {
+      that.setData({
+        refresh: false
+      })
+    }
+    // console.log(e.scrollTop,that.data.scroll);
+    setTimeout(function () {
+      that.setData({
+        scroll: e.scrollTop
+      })
+    }, 0)
+  },
+  receive(e) {
+    // console.log(1);
+    wx.cloud.callFunction({
+      name: 'orderTaking',
+      data: {
+        id: e.target.dataset.id,
+        item: '按钮'
+      },
+      success(res) {
+        wx.showToast({
+          title: '接单成功',
+          icon: 'success',
+          duration: 1000,
+          success: wx.switchTab({
+            url: '../orderTaker/orderTaker'
+          })
+        })
+      },
+    })
+    this.initData()
+  },
+  orderDetail(e) {
+    wx.navigateTo({
+      url: `../orderDetail/orderDetail?id=${e.currentTarget.dataset.id}&item=帮代`,
+    })
+  }
+  ,
+  searchChange(e) {
+    this.setData({
+      value: e.detail,
+    });
+  },
+  onSearch() {
+    let that = this
+    if (that.data.value === '') return
+    wx.navigateTo({
+      url: `../search/search?value=${that.data.value.trim()}`,
+    })
+  },
+  onClick() {
+    let that = this
+    if (that.data.value === '') return
+    wx.navigateTo({
+      url: `../search/search?value=${that.data.value}`,
+    })
+  },
+  classifyChange(event) {
 
+    // console.log(event);
+    switch (event.detail.name) {
+      case 0:
+        this.setData({
+          data: this.data.allData
+        })
+        break;
+      case 1:
+        let newarr = []
+        for (let item of this.data.allData) {
+          if (item.classify === '代课') {
+            newarr.push(item)
+          }
+        }
+        this.setData({
+          data: newarr
+        })
+        break;
+      case 2:
+        let newarr2 = []
+        for (let item of this.data.allData) {
+          if (item.classify === '外卖') {
+            newarr2.push(item)
+          }
+        }
+        this.setData({
+          data: newarr2
+        })
+        break;
+      case 3:
+        let newarr3 = []
+        for (let item of this.data.allData) {
+          if (item.classify === '快递') {
+            newarr3.push(item)
+          }
+        }
+        this.setData({
+          data: newarr3
+        })
+        break;
+      case 4:
+        let newarr4 = []
+        for (let item of this.data.allData) {
+          if (item.classify === '代买') {
+            newarr4.push(item)
+          }
+        }
+        this.setData({
+          data: newarr4
+        })
+        break;
+      case 5:
+        let newarr5 = []
+        for (let item of this.data.allData) {
+          if (item.classify === '打印') {
+            newarr5.push(item)
+          }
+        }
+        this.setData({
+          data: newarr5
+        })
+        break;
+      case 6:
+        let newarr6 = []
+        for (let item of this.data.allData) {
+          if (item.classify === '其它') {
+            newarr6.push(item)
+          }
+        }
+        this.setData({
+          data: newarr6
+        })
+        break;
+    }
+  },
   /**
    * 生命周期函数--监听页面加载
    */
+  refresh() {
+    this.initData()
+  },
+  //获取更新数据
+  initData() {
+    let that = this
+    wx.showNavigationBarLoading()
+    wx.cloud.callFunction({
+      name: 'getOrderDD',
+      data: {
+        item: '帮代'
+      },
+      success(res) {
+        // console.log(res);
+        that.setData({
+          allData: res.result,
+          data: res.result
+        })
+      },
+      complete() {
+        wx.hideNavigationBarLoading()
+      }
+    })
+  },
   onLoad: function (options) {
+    wx.setNavigationBarTitle({
+      title: '帮代'
+    })
+    this.initData()
 
   },
 

@@ -1,1 +1,35 @@
 /* pages/publish/publish.wxss */
+page {
+  margin: 0;
+  padding: 0;
+  background-color: #f2f2f2;
+}
+
+.classify {
+  height: 100rpx;
+  line-height: 100rpx;
+  text-align: center;
+}
+
+/* .detail .item{
+  display: flex;
+  align-items: center;
+} */
+.container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.container .button {
+  position: fixed;
+  bottom: 10rpx;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  width: 80%;
+  /* 固定定位，脱离文档流 */
+
+}
+.detail{
+  border-radius: 10rpx;
+}

@@ -1,2 +1,25 @@
 <!--pages/mine/mine.wxml-->
-<text>pages/mine/mine.wxml</text>
+<view class="container">
+  <view class="item">
+    <image src="{{avatarUrl}}" /><text>{{nickname}}</text>
+  </view>
+  <view class="item" bindtap="university">
+    <text>我的学校</text><text>{{university}}</text>
+    <van-icon name="arrow" />
+  </view>
+  <view class="item" bindtap="myorder">
+    <text>我的派单</text>
+    <van-icon name="arrow" />
+  </view>
+  <view class="item" bindtap="myorderReceive">
+    <text>我的接单</text>
+    <van-icon name="arrow" />
+  </view>
+  <view class="item" open-type="getUserInfo" bindgetuserinfo="exit">
+    <text>退出登录</text>
+  </view>
+</view>
+<van-dialog use-slot title="我的学校" show="{{ show }}" show-cancel-button bind:cancel="cancel" bind:confirm="confirm">
+  <van-field value="{{ university1 }}" title-width="4em" label="学校" placeholder="请输入学校名字" border="{{ false }}"
+    bind:change="university1" cursor="0" />
+</van-dialog>

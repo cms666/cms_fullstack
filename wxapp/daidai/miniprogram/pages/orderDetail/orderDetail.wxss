@@ -1,0 +1,43 @@
+/* miniprogram/pages/orderDetail/orderDetail.wxss */
+/* pages/publish/publish.wxss */
+page{
+  margin: 0;
+  padding: 0;
+  background-color: #f2f2f2;
+}
+.classify{
+  height:100rpx;
+  line-height: 100rpx;
+  text-align:center;
+} 
+
+/* .detail .item{
+  display: flex;
+  align-items: center;
+} */
+.container{
+  width: 90%;
+  margin: 0 auto;
+}
+.tips{
+  margin-top: 100rpx;
+  text-align: center;
+  color: red;
+}
+.container .button{
+  overflow: hidden;
+  width: 90%;
+  position: fixed;
+  z-index: 99;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+}
+.container .button van-button{
+  flex:1;
+  text-align: center;
+  padding: 10rpx 20rpx;
+}
+.detail{
+  border-radius: 20rpx;
+}

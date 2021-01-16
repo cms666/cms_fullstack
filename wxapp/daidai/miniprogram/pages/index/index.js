@@ -5,14 +5,14 @@ Page({
    * 页面的初始数据
    */
   data: {
-    classify: ['代课', '代课', '代课', '代课', '代课']
+    classify: ['代课', '外卖', '快递', '代买', '打印','其它',]
   },
 
   publish(e) {
     wx.checkSession({
       success() {
         wx.navigateTo({
-          url: `../publish/publish?classify=${e.target.dataset.classify}`,
+          url: `../publish/publish?classify=${e.currentTarget.dataset.classify}&item='发布'`,
         })//session_key 未过期，并且在本生命周期一直有效
       },
       fail() {

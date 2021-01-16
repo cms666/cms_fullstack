@@ -1,0 +1,51 @@
+<!--miniprogram/pages/orderDetail/orderDetail.wxml-->
+<view class="container">
+  <view class="classify">
+    <text>{{classify}}</text>
+  </view>
+  <view class="detail">
+    <van-cell-group>
+      <van-field value="{{ title }}" title-width="4em" label="标题" readonly="true" border="{{ false }}" />
+      <van-field value="{{ desc }}" title-width="4em" label="详情" readonly="true" type="textarea" autosize
+        border="{{ false }}" />
+      <van-field value="{{ price }}" title-width="4em" label="佣金￥" readonly="true" border="{{ false }}" />
+      <van-field value="{{ phone }}" title-width="4em" label="联系方式" readonly="true" border="{{ false }}" />
+      <van-field value="{{ time }}" title-width="4em" label="截止时间" readonly="true" border="{{ false }}" />
+      <view class="receiver" hidden="{{receive}}">
+        <van-field value="{{ receiver.nickName }}" title-width="4em" label="接单人" readonly="true" border="{{ false }}"
+          right-icon="{{receiver.avatarUrl}}" />
+      </view>
+    </van-cell-group>
+  </view>
+  <view class="tips">
+    <text>{{tip}}</text>
+  </view>
+  <view hidden="{{init}}">
+    <view class="button">
+      <van-button size="large" type="danger" round="true" bind:click="cancel">取消订单</van-button>
+      <van-button size="large" type="primary" color="#1baeae"round="true" bind:click="update">修改订单</van-button>
+    </view>
+  </view>
+  <view hidden="{{ing}}">
+    <view class="button">
+      <van-button size="large" type="danger" round="true" disabled="true">任务进行中</van-button>
+    </view>
+  </view>
+  <view hidden="{{finish}}">
+    <view class="button">
+      <van-button size="large" type="primary" color="#1baeae" round="true" bind:click="finish">完成</van-button>
+    </view>
+  </view>
+  <view hidden="{{help}}">
+    <view class="button">
+      <van-button size="large" type="primary" color="#1baeae" round="true" bind:click="receive">我要接单</van-button>
+    </view>
+  </view>
+  <view hidden="{{finish2}}">
+    <view class="button">
+      <van-button size="large" type="primary" color="#1baeae" round="true" bind:click="finish2">确认完成</van-button>
+    </view>
+  </view>
+</view>
+
+<van-toast id="van-toast" />

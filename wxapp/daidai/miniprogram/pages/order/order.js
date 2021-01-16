@@ -5,14 +5,22 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    order:[]
   },
-
+  orderDetail(e){
+    wx.navigateTo({
+      url: `../orderDetail/orderDetail?id=${e.currentTarget.dataset.id}`,
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
 
+    wx.setNavigationBarTitle({
+      title: '发单'
+    })
+   
   },
 
   /**
@@ -26,7 +34,23 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    const that = this
+    wx.showNavigationBarLoading()
+    wx.cloud.callFunction({
+      name:'getOrderDD',
+      data:{
+        item:'发单'
+      },
+      success(res){
+        // console.log(res);
+        that.setData({
+          order:res.result
+        })
+      },
+      complete() {
+        wx.hideNavigationBarLoading()
+      }
+    })
   },
 
   /**

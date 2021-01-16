@@ -1,1 +1,36 @@
 /* pages/mine/mine.wxss */
+page{
+  padding: 0;
+  margin: 0;
+  background-color: #f2f2f2;
+
+}
+.container{
+  width: 100%;
+}
+.container .item{
+  margin: 30rpx auto 0;
+  padding: 0 10rpx;
+  height: 100rpx;
+  width: 90%;
+  background-color: #fff;
+  border-radius: 10rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  box-shadow: 0px 7rpx 10rpx #ececec;
+  transition: all .5s;
+  justify-content: space-between;
+}
+.container .item image{
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+}
+.container .item:first-child{
+  height: 200rpx;
+}
+.container .item:last-child{
+  justify-content: center;
+}

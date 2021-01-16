@@ -1,0 +1,8 @@
+<!--miniprogram/pages/myorder/myorder.wxml-->
+<view class="container">
+  <view class="item" wx:for="{{order}}" wx:key="id" data-id="{{item.id}}" bindtap="orderDetail">
+    <view class="header"><text class="title">{{item.title}}</text><text class="price">￥{{item.price}}</text></view>
+    <view class="desc"><text>{{item.desc}}</text></view>
+    <view class="tips"><text class="time">截止:{{item.time}}</text><text class="tip">{{item.tip}}</text></view>
+  </view>
+</view>
