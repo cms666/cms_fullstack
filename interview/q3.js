@@ -1,0 +1,1 @@
+[[3,2,1].reduce(Math.pow), [].reduce(Math.pow)] //[9,error]
