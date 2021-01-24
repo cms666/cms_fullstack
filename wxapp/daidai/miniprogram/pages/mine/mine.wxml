@@ -1,6 +1,7 @@
 <!--pages/mine/mine.wxml-->
 <view class="container">
-  <view class="item">
+  <button wx:if="{{!hasUserInfo}}" open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">点击登录</button>
+  <view class="item" wx:else>
     <image src="{{avatarUrl}}" /><text>{{nickname}}</text>
   </view>
   <view class="item" bindtap="university">

@@ -9,6 +9,7 @@
     "pages/orderDetail/orderDetail",
     "pages/search/search",
     "pages/myorder/myorder",
+    "pages/login/login",
     "pages/myorderReceive/myorderReceive"
   ],
   "window": {

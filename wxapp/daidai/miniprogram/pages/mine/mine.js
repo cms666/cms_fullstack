@@ -1,53 +1,62 @@
 // pages/mine/mine.js
+import checkLogin from '../utils/checkLogin.js'
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    avatarUrl:'',
-    nickname:'',
-    university:'',
-    university1:'',
-    show:false,
+    avatarUrl: '',
+    nickname: '',
+    university: '',
+    university1: '',
+    show: false,
+    hasUserInfo: false,
   },
-  university(){
+  onGetUserInfo(e) {
+    let that = this
+    if (e.detail.userInfo) {
+      checkLogin()
+      that.getUser()
+    }
+  },
+  university() {
     this.setData({
-      show:true,
-      university1:this.data.university
+      show: true,
+      university1: this.data.university
     })
   },
-  university1(e){
+  university1(e) {
     this.setData({
-      university1:e.detail
+      university1: e.detail
     })
   },
-  confirm(){
+  confirm() {
     let that = this
     that.setData({
-      university:that.data.university1
+      university: that.data.university1
     })
     wx.cloud.callFunction({
-      name:'getUserInfo',
-      data:{
-        university:that.data.university1,
-        item:'我的大学',
+      name: 'getUserInfo',
+      data: {
+        university: that.data.university1,
+        item: '我的大学',
       }
-    }).then(res=>{
+    }).then(res => {
       console.log(res);
-      
+
     })
   },
-  cancel(){},
-  exit(e){
+  cancel() { },
+  exit(e) {
     console.log(e);
   },
-  myorder(){
+  myorder() {
     wx.navigateTo({
       url: '../myorder/myorder',
     })
   },
-  myorderReceive(){
+  myorderReceive() {
     wx.navigateTo({
       url: '../myorderReceive/myorderReceive',
     })
@@ -55,25 +64,23 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-    const that = this
-    wx.setNavigationBarTitle({
-      title: '我的'
-    })
+  getUser(){
+    let that = this
     wx.checkSession({
       success() {
         wx.cloud.callFunction({
-          name:'getUserInfo',
-          data:{
-            item:"登录"
+          name: 'getUserInfo',
+          data: {
+            item: "登录"
           }
-        }).then(res =>{
+        }).then(res => {
           // console.log(res);
           let user = res.result.data[0]
           that.setData({
-            avatarUrl:user.avatarUrl,
-            nickname:user.nickName,
-            university:user.university
+            avatarUrl: user.avatarUrl,
+            nickname: user.nickName,
+            university: user.university,
+            hasUserInfo: true
           })
         })
       },
@@ -82,6 +89,13 @@ Page({
         wx.login() //重新登录
       }
     })
+  },
+  onLoad: function (options) {
+    const that = this
+    wx.setNavigationBarTitle({
+      title: '我的'
+    })
+    that.getUser()
   },
 
   /**

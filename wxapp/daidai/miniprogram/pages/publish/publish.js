@@ -1,5 +1,6 @@
 // pages/publish/publish.js
 import Toast from '../../miniprogram_npm/@vant/weapp/toast/toast';
+import timestampToTime from '../utils/timestampToTime'
 
 Page({
 
@@ -103,19 +104,10 @@ Page({
     });
   },
   confirm(value) {
-    this.setData({ show: false, time: this.timestampToTime(this.data.currentDate) });
+    this.setData({ show: false, time: timestampToTime(this.data.currentDate) });
   },
   cancel() {
     this.setData({ show: false });
-  },
-  timestampToTime(timestamp) {
-    let date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-    let Y = date.getFullYear() + '-';
-    let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-    let D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ';
-    let h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
-    let m = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
-    return Y + M + D + h + m;
   },
   /**
    * 生命周期函数--监听页面加载
@@ -133,7 +125,7 @@ Page({
         price: data.price,
         phone: data.phone,
         currentDate: data.time,
-        time: that.timestampToTime(data.time),
+        time: timestampToTime(data.time),
         classify: data.classify,
         showpublish: true,
         showupdate: false

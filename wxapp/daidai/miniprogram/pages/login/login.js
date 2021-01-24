@@ -1,31 +1,23 @@
-// miniprogram/pages/index/index.js
+// miniprogram/pages/login/login.js
+import checkLogin from '../utils/checkLogin'
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    classify: ['代课', '外卖', '快递', '代买', '打印','其它',]
+    canIUse:true
   },
-
-  publish(e) {
-    wx.checkSession({
-      success() {
-        wx.navigateTo({
-          url: `../publish/publish?classify=${e.currentTarget.dataset.classify}&item='发布'`,
-        })//session_key 未过期，并且在本生命周期一直有效
-      },
-      fail() {
-        // session_key 已经失效，需要重新执行登录流程
-        wx.login() //重新登录
-      }
-    })
-
+  onGetUserInfo(e){
+    if(e.detail.userInfo){
+      checkLogin('index')
+    }
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+
   },
 
   /**

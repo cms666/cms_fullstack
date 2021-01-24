@@ -1,6 +1,7 @@
 //app.js
+import checkLogin from './pages/utils/checkLogin.js'
 App({
-  onLaunch: function () {
+  onLaunch: function (options) {
     const self = this
     if (!wx.cloud) {
       console.error('请使用 2.2.3 或以上的基础库以使用云能力')
@@ -15,42 +16,6 @@ App({
         traceUser: true,
       })
     }
-    wx.getSetting({
-      success(settingRes) {
-        //已经授权
-        //  console.log(settingRes);
-
-        if (settingRes.authSetting['scope.userInfo']) {
-          wx.getUserInfo({   //获取用户信息
-            success(infoRes) {
-              // console.log(infoRes);
-
-              self.globalData.userInfo = infoRes.userInfo
-              wx.cloud.callFunction({
-                name: 'createUserDD',
-                data: {
-                  avatarUrl: infoRes.userInfo.avatarUrl,
-                  name: '',
-                  nickName: infoRes.userInfo.nickName,
-                  sex: infoRes.userInfo.gender,
-                  university:''
-                },
-                success(res) {
-                  //  console.log(res);
-                },
-                fail(err) {
-                  console.log('错误', err);
-                }
-              })
-            },
-          })
-        } else {
-          wx.login({
-            timeout: 0,
-          })
-        }
-      },
-    })
-    this.globalData = {}
+    checkLogin()
   }
 })
