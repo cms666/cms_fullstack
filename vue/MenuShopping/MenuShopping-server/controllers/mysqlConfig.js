@@ -48,14 +48,21 @@ let insertUser = function(value){
   return allServices.query(_sql,value)
 }
 
-//根据分类查找对应的文章列表
-let findNoteListByType = function(noteType){
-  let _sql = `select * from note where note_type="${noteType}"`
+//查找首页轮播列表
+let findHomeSwiper = function(){
+  let _sql = `select * from homeswiper`
   return allServices.query(_sql)
 }
 
-let findNoteDetail= function(id){
-  let _sql = `select * from note where id="${id}"`
+//查找首页菜品列表
+let findHomeFoodlist = function(){
+  let _sql = `select * from foods`
+  return allServices.query(_sql)
+}
+
+//查找首页原材料列表
+let findHomeMaterialList = function(){
+  let _sql = `select * from material`
   return allServices.query(_sql)
 }
 
@@ -68,8 +75,8 @@ module.exports = {
   userLogin,
   findUser,
   insertUser,
-  findNoteListByType,
-  findNoteDetail,
-  insertNote
+  findHomeSwiper,
+  findHomeFoodlist,
+  findHomeMaterialList
 }
 
