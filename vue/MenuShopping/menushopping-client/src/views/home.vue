@@ -1,12 +1,12 @@
 <template>
   <header class="home-header">
     <div class="header-title"><p>跟着食谱买菜</p></div>
-    <div class="search">
+    <div class="search" @click="tosearch">
       <i class="iconfont icon--search"></i>
     </div>
 
-    <router-link to="./login" v-if="!isLogin">登录</router-link>
-    <router-link to="./user" v-else class="usericon">
+    <router-link to="./login" tag="span" v-if="!isLogin">登录</router-link>
+    <router-link to="./user" tag="span" v-else class="usericon">
       <van-icon name="manager-o" />
     </router-link>
   </header>
@@ -21,6 +21,7 @@
     </div>
   </div>
   <foodlist :title="'爆火菜品'" :foods = "homeFoodList"/>
+  <material :title="'新鲜食材'" :materials = "homeMaterialList"/>
   <snavbar />
 </template>
 
@@ -29,19 +30,24 @@ import { reactive, toRefs, onMounted } from "vue";
 import snavbar from "../components/navbar";
 import swiper from "../components/swiper";
 import foodlist from "../components/foodlist";
+import material from '../components/materiallist'
 import { useRouter } from "vue-router";
 import { home } from "../../axios/interface/home";
 import { getLocal } from "../utils/utils";
 import { Toast } from "vant";
+import { useStore } from 'vuex'
 
 export default {
   components: {
     snavbar,
     swiper,
-    foodlist
+    foodlist,
+    material,
   },
   setup() {
     const router = useRouter();
+    const store = useStore()
+
     const state = reactive({
       categoryList: [
         {
@@ -97,6 +103,7 @@ export default {
       const token = getLocal("token");
       if (token) {
         state.isLogin = true;
+        store.dispatch('updateCart')
       }
       Toast.loading({
         message: "加载中...",
@@ -129,6 +136,7 @@ export default {
   line-height: 1rem;
   .boxSizing();
   z-index: 10000;
+  box-shadow: 0 0 0.1rem #666;
 }
 .header-title {
   font-family: STHupo;
@@ -151,7 +159,10 @@ export default {
 .classify {
   .boxSizing();
   padding: 0.3rem 0.4rem;
+  margin-top: -0.1rem;
   background-color: @primary;
+  border-bottom-left-radius: 0.1rem;
+  border-bottom-right-radius: 0.1rem;
 }
 .category-list {
   display: flex;

@@ -26,12 +26,12 @@ export default {
       type: String,
       default: "",
     },
-    foods:{
-      type:Array,
-      default:function(){
-        return []
-      }
-    }
+    foods: {
+      type: Array,
+      default: function () {
+        return [];
+      },
+    },
   },
 };
 </script>
@@ -39,7 +39,7 @@ export default {
 <style lang="less" scoped >
 @import "../assets/mixin";
 .food {
-  padding: 0.2rem 0.4rem 2rem 0.4rem;
+  padding: 0.2rem 0.4rem;
   background-color: @bc;
   .boxSizing();
   .food-header {
@@ -55,18 +55,23 @@ export default {
       border-radius: 0.2rem;
       img {
         .wh(2rem,2rem);
+        border-radius: 0.1rem;
       }
-      .food-desc{
+      .food-desc {
         margin-left: 0.2rem;
-        .title{
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        .title {
           font-weight: 700;
+          margin-bottom: 0.1rem;
         }
-        .classify{
+        .classify {
           color: #666;
           margin-bottom: 0.2rem;
         }
-        .desc{
-          width: 6.4rem;
+        .desc {
+          width: 6.6rem;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;

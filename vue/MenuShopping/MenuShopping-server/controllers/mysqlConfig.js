@@ -66,17 +66,37 @@ let findHomeMaterialList = function(){
   return allServices.query(_sql)
 }
 
-let insertNote = function(value){
-  let _sql = `insert into note set useId=?,title=?,note_type=?,note_content=?,c_time=?,head_img=?,nickname=?`
-  return allServices.query(_sql,value)
+// 查找原材料详情
+let findMaterialDetail = function(id){
+  let _sql = `select * from material where id="${id}"`
+  return allServices.query(_sql)
 }
 
+//加入购物车
+let addCart = function(value){
+  let _sql = `insert into cart set userid=?,materialid=?,count=?`
+  return allServices.query(_sql,value)
+}
+//查找购物车里是否有食材
+let findCartMaterial = function(token, materialid){
+  let _sql = `select * from cart where userid="${token}" and materialid="${materialid}"`
+  return allServices.query(_sql)
+}
+//查询用户购物车
+let findUserCart = function(token){
+  let _sql = `select * from cart where userid="${token}"`
+  return allServices.query(_sql)
+}
 module.exports = {
   userLogin,
   findUser,
   insertUser,
   findHomeSwiper,
   findHomeFoodlist,
-  findHomeMaterialList
+  findHomeMaterialList,
+  findMaterialDetail,
+  addCart,
+  findCartMaterial,
+  findUserCart,
 }
 

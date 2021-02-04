@@ -78,7 +78,8 @@ export default {
         font-size: 0.3rem;
       }
       .van-icon-shopping-cart-o {
-        margin-bottom: 0.08rem;
+        margin: 0 auto 0.08rem;
+        width: 1rem;
       }
     }
   }

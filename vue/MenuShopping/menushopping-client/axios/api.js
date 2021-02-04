@@ -3,6 +3,7 @@ import config from "./config.js";
 import qs from "qs"; //序列化请求数据，服务端要求
 import { Toast } from "vant";
 import {useRouter} from "vue-router";
+import {getLocal} from '../src/utils/utils'
 const router = useRouter()    
 
 export default function $axios(options) {
@@ -19,6 +20,12 @@ export default function $axios(options) {
           config.method.toLocaleUpperCase() === "PUT" ||
           config.method.toLocaleUpperCase() === "DELETE"
         ) {
+          if(config.method.toLocaleUpperCase() === "POST" && !getLocal('token')){
+            router.push({
+              path: `/login`,
+            });
+          }
+          config.headers['token'] = getLocal('token') || ''
           config.data = qs.stringify(config.data);
         }
         return config;

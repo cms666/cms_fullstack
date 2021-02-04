@@ -25,9 +25,9 @@ export default {
 
 <style lang='less' scoped>
 @import "../assets/mixin";
-
 .my-swipe {
   background-color: @primary;
+  margin-top: 1rem;
   img {
     width: 100%;
     height: 7rem;

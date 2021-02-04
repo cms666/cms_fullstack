@@ -11,7 +11,7 @@ router.get("/", async (ctx, next) => {
   });
 });
 
-router.post("/home", async (ctx, next) => {
+router.get("/home", async (ctx, next) => {
   let data = {};
   let r = "";
   data.homeSwiper = await findHomeSwiper();

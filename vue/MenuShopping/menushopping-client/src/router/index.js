@@ -17,6 +17,16 @@ const routes = [
     name: "login",
     component: () => import("../views/login"),
   },
+  {
+    path: "/materialdetail/:id",
+    name: "materialdetail",
+    component: () => import("../views/materialdetail"),
+  },
+  {
+    path: "/cart",
+    name: "cart",
+    component: () => import("../views/cart"),
+  },
 ];
 
 const router = createRouter({

@@ -4,11 +4,11 @@ const {userLogin,findUser,insertUser} = require('../controllers/mysqlConfig')
 router.prefix('/users')
 
 //登录
-router.post('/login', async(ctx, next) =>{
-  let username = ctx.request.body.username
-  let password = ctx.request.body.password
+router.get('/login', async(ctx, next) =>{
+  let username = ctx.request.query.username
+  let password = ctx.request.query.password
   //把参数拿到数据库查询
-  console.log(username);
+  console.log(ctx.request.query);
   await userLogin(username, password).then(res => {
     console.log(res);
     let r = "";
@@ -41,11 +41,11 @@ router.post('/login', async(ctx, next) =>{
 })
 
 //注册
-router.post('/register', async(ctx, next) =>{
-  let username = ctx.request.body.username
-  let password = ctx.request.body.password
+router.get('/register', async(ctx, next) =>{
+  let username = ctx.request.query.username
+  let password = ctx.request.query.password
   //把参数拿到数据库查询
-  console.log(username);
+  console.log(ctx.request.query);
   await findUser(username).then(async res => {
     if(!res.length){
       await insertUser([username, password]).then(res1 =>{

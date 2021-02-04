@@ -26,6 +26,8 @@ body {
   height: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
+  margin: 0;
+  padding: 0;
 }
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
@@ -33,16 +35,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   // text-align: center;
   color: #2c3e50;
-}
-
-.router-view {
-  width: 100%;
-  height: auto;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  margin: 0 auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .slide-right-enter-active,
