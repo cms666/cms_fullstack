@@ -6,7 +6,7 @@
         class="food-item"
         v-for="item in foods"
         :key="item.id"
-        @click="goToDetail(item)"
+        @click="goToDetail(item.id)"
       >
         <img :src="item.url" alt="" />
         <div class="food-desc">
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { useRouter } from "vue-router";
 export default {
   props: {
     title: {
@@ -33,13 +34,23 @@ export default {
       },
     },
   },
+  setup() {
+    const router = useRouter();
+    const goToDetail = (id) => {
+      router.push({ name: `/fooddetail/${id}` });
+    };
+
+    return {
+      goToDetail,
+    };
+  },
 };
 </script>
 
 <style lang="less" scoped >
 @import "../assets/mixin";
 .food {
-  padding: 0.2rem 0.4rem;
+  padding: 0.2rem;
   background-color: @bc;
   .boxSizing();
   .food-header {
@@ -62,6 +73,7 @@ export default {
         display: flex;
         justify-content: space-between;
         flex-direction: column;
+        width: 7rem;
         .title {
           font-weight: 700;
           margin-bottom: 0.1rem;
@@ -71,7 +83,6 @@ export default {
           margin-bottom: 0.2rem;
         }
         .desc {
-          width: 6.6rem;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;

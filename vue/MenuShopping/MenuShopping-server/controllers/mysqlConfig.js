@@ -87,6 +87,31 @@ let findUserCart = function(token){
   let _sql = `select * from cart where userid="${token}"`
   return allServices.query(_sql)
 }
+
+//修改购物车数据
+let updateCart = function(value){
+  let _sql = `update cart set count=? where id=?`
+  return allServices.query(_sql,value)
+}
+
+//删除购物车某件食材
+let deleteCart = function(id){
+  let _sql = `delete from cart where id=${id}`
+  return allServices.query(_sql)
+}
+
+//查询菜品的详情
+let getFoodDetail = function(id){
+  let _sql = `select * from foods where id=${id}`
+  return allServices.query(_sql)
+}
+
+//根据id查询菜品需要的食材
+let getFoodMaterial = function(id){
+  let _sql = `select * from foodmaterial where foodid=${id}`
+  return allServices.query(_sql)
+}
+
 module.exports = {
   userLogin,
   findUser,
@@ -98,5 +123,9 @@ module.exports = {
   addCart,
   findCartMaterial,
   findUserCart,
+  updateCart,
+  deleteCart,
+  getFoodDetail,
+  getFoodMaterial,
 }
 

@@ -21,6 +21,7 @@ export default {
 </script>
 
 <style lang="less">
+@import './assets/mixin.less';
 html,
 body {
   height: 100%;
@@ -28,6 +29,7 @@ body {
   overflow-y: scroll;
   margin: 0;
   padding: 0;
+  background-color: @bc;
 }
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;

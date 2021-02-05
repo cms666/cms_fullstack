@@ -2,7 +2,7 @@
   <div class="cart">
     <sheader :name="'购物车'" />
     <div class="cart-list">
-      <cartlist :cartlist = "cartlist"/>
+      <cartlist :cartlist="cartlist" />
     </div>
   </div>
   <snavbar />
@@ -31,10 +31,13 @@ export default {
         message: "加载中...",
         forbidClick: true,
       });
-      let { data } = await getCart();
-      console.log(data);
-      state.cartlist = data
-      Toast.clear()
+      let res = await getCart();
+      if (res.code == "80000") {
+        state.cartlist = res.data;
+        Toast.clear();
+      } else {
+        Toast(res.message);
+      }
     });
 
     return {
@@ -47,6 +50,8 @@ export default {
 <style lang="less" scoped >
 @import "../assets/mixin";
 .cart {
+  background-color: @bc;
+  height: 100%;
   .cart-list {
     padding-top: 1rem;
   }

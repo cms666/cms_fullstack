@@ -2,9 +2,9 @@ import axios from "axios";
 import config from "./config.js";
 import qs from "qs"; //序列化请求数据，服务端要求
 import { Toast } from "vant";
-import {useRouter} from "vue-router";
+import router from '../src/router'
 import {getLocal} from '../src/utils/utils'
-const router = useRouter()    
+// const router = useRouter()    
 
 export default function $axios(options) {
   return new Promise((resolve, reject) => {

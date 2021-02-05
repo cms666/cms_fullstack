@@ -23,9 +23,19 @@ const routes = [
     component: () => import("../views/materialdetail"),
   },
   {
+    path: "/fooddetail/:id",
+    name: "fooddetail",
+    component: () => import("../views/fooddetail"),
+  },
+  {
     path: "/cart",
     name: "cart",
     component: () => import("../views/cart"),
+  },
+  {
+    path: "/video/:url",
+    name: "video",
+    component: () => import("../views/video"),
   },
 ];
 

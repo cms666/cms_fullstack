@@ -158,7 +158,7 @@ export default {
 }
 .classify {
   .boxSizing();
-  padding: 0.3rem 0.4rem;
+  padding: 0.3rem 0.2rem;
   margin-top: -0.1rem;
   background-color: @primary;
   border-bottom-left-radius: 0.1rem;

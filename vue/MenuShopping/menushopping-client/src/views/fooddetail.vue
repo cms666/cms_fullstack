@@ -2,25 +2,24 @@
   <sheader :name="'食材详情'" :back="'/home'" />
   <van-swipe class="my-swipe" :autoplay="3000" indicator-color="#1baeae">
     <van-swipe-item v-for="item in 1">
-      <img :src="material.url" alt="" />
+      <img :src="foodDetail.url" alt="" />
     </van-swipe-item>
   </van-swipe>
-  <div class="material">
-    <div class="material-header">
-      <div class="title">{{ material.name }}</div>
+  <div class="foodDetail">
+    <div class="foodDetail-header">
+      <div class="title">{{ foodDetail.name }}</div>
       <div class="price">
-        ￥<span>{{ material.price }}</span
-        >.00
+        {{foodDetail.classify}}
       </div>
     </div>
-    <div class="material-desc">
+    <div class="foodDetail-desc">
       <div class="distribution">
-        <div class="tip">配送</div>
-        <div class="right">顺丰</div>
+        <div class="tip">教程</div>
+        <div class="right"><router-link :to="{name:'video',params:{url:foodDetail.howdo}}"><van-icon name="tv-o" />看教程</router-link></div>
       </div>
       <div class="desc">
         <div class="tip">详情</div>
-        <div class="right">{{ material.desc }}</div>
+        <div class="right">{{ foodDetail.desc }}</div>
       </div>
     </div>
   </div>
@@ -36,7 +35,7 @@
 import { onMounted, reactive, toRefs,computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import sheader from "../components/header";
-import { detail,addCart } from "../../axios/interface/material";
+import { detail,addCart,getFoodDetail } from "../../axios/interface/material";
 import { useStore } from 'vuex';
 import { Toast } from "vant";
 
@@ -49,15 +48,17 @@ export default {
     const router = useRouter()
     const store = useStore()
     const state = reactive({
-      material: {},
+      foodDetail: {},
+      foodMaterial:[]
     });
 
     onMounted(async () => {
       console.log(route.params);
 
-      let { data } = await detail({ id: route.params.id });
-      state.material = data;
-      console.log(state.material);
+      let { data } = await getFoodDetail({ id: route.params.id });
+      state.foodDetail = data.foodDetail;
+      state.foodMaterial = data.foodMaterial
+      console.log(data);
     });
         // 角标
     const count = computed(() => {
@@ -65,14 +66,14 @@ export default {
     })
     //加入购物车
     const goAddCart = async ()=>{
-      let res = await addCart({id:state.material.id,count:1})
-      console.log(res);
-      if(res.code == '80000'){
-        store.dispatch('updateCart')
-        Toast.success(res.message)
-      }else{
-        Toast.fail(res.message)
-      }
+      // let res = await addCart({id:state.foodDetail.id,count:1})
+      // console.log(res);
+      // if(res.code == '80000'){
+      //   store.dispatch('updateCart')
+      //   Toast.success(res.message)
+      // }else{
+      //   Toast.fail(res.message)
+      // }
     }
     //去购物车 
     const goTo = () =>{
@@ -97,10 +98,10 @@ export default {
     height: 10rem;
   }
 }
-.material {
+.foodDetail {
   padding: 0.2rem 0.2rem 1.5rem;
   background-color: @bc;
-  .material-header {
+  .foodDetail-header {
     background-color: #fff;
     border-radius: 0.2rem;
     padding: 0.2rem;
@@ -119,7 +120,7 @@ export default {
       }
     }
   }
-  .material-desc {
+  .foodDetail-desc {
     background-color: #fff;
     border-radius: 0.2rem;
     padding: 0.2rem;

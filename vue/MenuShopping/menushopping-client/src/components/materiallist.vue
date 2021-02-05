@@ -57,7 +57,7 @@ export default {
     const store = useStore();
     const router = useRouter();
     const goToDetail = (id) => {
-      router.push({ path: `/materialdetail/${id}` });
+      router.push({ name: `/materialdetail/${id}` });
     };
     const goAddCart = async (id) => {
       let res = await addCart({ id: id, count: 1 });
@@ -80,7 +80,7 @@ export default {
 <style lang="less" scoped >
 @import "../assets/mixin";
 .material {
-  padding: 0.2rem 0.4rem 2rem 0.4rem;
+  padding: 0.2rem 0.2rem 2rem;
   background-color: @bc;
   .boxSizing();
   .material-header {
@@ -103,13 +103,14 @@ export default {
         display: flex;
         justify-content: space-between;
         flex-direction: column;
+        width: 7rem;        
         .title {
           font-weight: 700;
           margin-bottom: 0.1rem;
         }
         .desc {
           color: #666;
-          width: 6.6rem;
+      
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;

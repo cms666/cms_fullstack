@@ -25,7 +25,7 @@ export default {
     const router = useRouter()
     const back = props.back
     const goBack = () =>{
-      router.push(back)
+      router.back(-1)
     }
     return {goBack};
   },
