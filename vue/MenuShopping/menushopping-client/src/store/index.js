@@ -2,11 +2,15 @@ import { createStore } from 'vuex'
 import {getCart} from '../../axios/interface/material'
 export default createStore({
   state: {
-    cartCount:0
+    cartCount:0,
+    cartselected:[]
   },
   mutations: {
     addCart(state,payload){
       state.cartCount = payload.count
+    },
+    selectCart(state,payload){
+      state.cartselected = payload
     }
   },
   actions: {

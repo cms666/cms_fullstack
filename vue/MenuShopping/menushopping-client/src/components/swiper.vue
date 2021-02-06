@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import { useRouter } from "vue-router";
+
 export default {
   props: {
     list: Array,
@@ -15,8 +17,9 @@ export default {
     },
   },
   setup() {
+    const router = useRouter();
     function goTo(id) {
-      console.log(id);
+      router.push({ path: `/fooddetail/${id}` });
     }
     return { goTo };
   },

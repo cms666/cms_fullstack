@@ -57,7 +57,7 @@ export default {
     const store = useStore();
     const router = useRouter();
     const goToDetail = (id) => {
-      router.push({ name: `/materialdetail/${id}` });
+      router.push({ path: `/materialdetail/${id}` });
     };
     const goAddCart = async (id) => {
       let res = await addCart({ id: id, count: 1 });

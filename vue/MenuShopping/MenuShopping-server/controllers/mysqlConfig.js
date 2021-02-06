@@ -90,7 +90,7 @@ let findUserCart = function(token){
 
 //修改购物车数据
 let updateCart = function(value){
-  let _sql = `update cart set count=? where id=?`
+  let _sql = `update cart set count=? where userid=? and materialid=?`
   return allServices.query(_sql,value)
 }
 
@@ -110,6 +110,11 @@ let getFoodDetail = function(id){
 let getFoodMaterial = function(id){
   let _sql = `select * from foodmaterial where foodid=${id}`
   return allServices.query(_sql)
+}
+
+//把食谱的食材加入购物车
+let addFoodCart = function(id){
+  
 }
 
 module.exports = {

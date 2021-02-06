@@ -91,51 +91,52 @@ router.post("/addCart", async (ctx, next) => {
 router.post("/getCart", async (ctx, next) => {
   let token = ctx.request.header.token;
   console.log(token);
-  if(token){
-      await findUserCart(token)
-    .then(async (res) => {
-      console.log(res);
-      if (res.length) {
-        for (let i = 0; i < res.length; i++) {
-          let data = await findMaterialDetail(res[i].materialid);
-          res[i].material = data[0];
-        }
+  if (token) {
+    await findUserCart(token)
+      .then(async (res) => {
         console.log(res);
-        ctx.body = {
-          code: "80000",
-          data: res,
-          message: "查找成功",
-        };
-      }else{
-        ctx.body = {
-          code:'80001',
-          data:[],
-          message:'购物车为空'
+        if (res.length) {
+          for (let i = 0; i < res.length; i++) {
+            let data = await findMaterialDetail(res[i].materialid);
+            res[i].material = data[0];
+          }
+          console.log(res);
+          ctx.body = {
+            code: "80000",
+            data: res,
+            message: "查找成功",
+          };
+        } else {
+          ctx.body = {
+            code: "80001",
+            data: [],
+            message: "购物车为空",
+          };
         }
-      } 
-    })
-    .catch((err) => {
-      ctx.body = {
-        code: "80004",
-        data: err,
-        message: "error",
-      };
-    });
-  }else {
+      })
+      .catch((err) => {
+        ctx.body = {
+          code: "80004",
+          data: err,
+          message: "error",
+        };
+      });
+  } else {
     ctx.body = {
       code: "80003",
       message: "请登录",
     };
   }
-
 });
 
 //修改购物车数据
 router.get("/updateCart", async (ctx, next) => {
   let id = ctx.request.query.id;
   let count = ctx.request.query.count;
-  console.log(id, count);
-  await updateCart([count, id])
+  let token = ctx.request.header.token;
+
+  console.log(id, token, count);
+  await updateCart([count, token, id])
     .then((res) => {
       console.log(res);
       if (res.changedRows) {
@@ -187,40 +188,86 @@ router.delete("/deleteCart", async (ctx, next) => {
 });
 
 //查询菜品详情
-router.get('/getFoodDetail',async (ctx, next) =>{
-  let id = ctx.request.query.id
-  let alldata = {}
-  await getFoodDetail(id).then(async res =>{
-    alldata.foodDetail = res[0]
-    alldata.foodMaterial = []
-    let data = await getFoodMaterial(id)
-    for(let i = 0; i < data.length; i++){
-      let obj = {}
-      obj.id = data[i].materialid
-      obj.materialid = data[i].materialid
-      obj.count = 1
-      let material = await findMaterialDetail(data[i].materialid)
-      obj.material = material
-      alldata.foodMaterial.push(obj)
-    }
-    if(alldata.foodMaterial || alldata.foodMaterial.length ){
-      ctx.body = {
-        code:'80000',
-        data:alldata,
-        message:'总算查完了'
+router.get("/getFoodDetail", async (ctx, next) => {
+  let id = ctx.request.query.id;
+  let alldata = {};
+  await getFoodDetail(id)
+    .then(async (res) => {
+      alldata.foodDetail = res[0];
+      alldata.foodMaterial = [];
+      let data = await getFoodMaterial(id);
+      for (let i = 0; i < data.length; i++) {
+        let obj = {};
+        obj.id = data[i].materialid;
+        obj.materialid = data[i].materialid;
+        obj.count = 1;
+        let material = await findMaterialDetail(data[i].materialid);
+        obj.material = material[0];
+        alldata.foodMaterial.push(obj);
       }
-    }else{
+      if (alldata.foodMaterial || alldata.foodMaterial.length) {
+        ctx.body = {
+          code: "80000",
+          data: alldata,
+          message: "总算查完了",
+        };
+      } else {
+        ctx.body = {
+          code: "80002",
+          data: "error",
+          message: "已经不想干了",
+        };
+      }
+    })
+    .catch((err) => {
       ctx.body = {
-        code:'80002',
-        data:'error',
-        message:'已经不想干了'
+        code: "80004",
+        data: err,
+      };
+    });
+});
+
+//把食谱的食材加进购物车
+router.post("/addFoodCart", async (ctx, next) => {
+  let token = ctx.request.header.token;
+  let data = Object.values(ctx.request.body);
+  console.log(data);
+  if (token) {
+    let sum = 0;
+    for (let i = 0; i < data.length; i++) {
+      let res = await findCartMaterial(token, data[i].id);
+      let res1, res2;
+      if (res.length) {
+        let count = Number(data[i].count) + Number(res[0].count);
+        res1 = await updateCart([count, token, data[i].id]);
+        if (res1.affectedRows) {
+          sum++;
+        }
+      } else {
+        res2 = await addCart([token, data[i].id, data[i].count]);
+        if (res2.affectedRows) {
+          sum++;
+        }
       }
     }
-  }).catch(err =>{
+    if (sum == data.length) {
+      ctx.body = {
+        code: "80000",
+        data: "ok",
+        message: "加入成功",
+      };
+    } else {
+      ctx.body = {
+        code: "80004",
+        data: "error",
+        message: "加入失败",
+      };
+    }
+  } else {
     ctx.body = {
-      code:'80004',
-      data:err
-    }
-  })
-})
+      code: "80003",
+      message: "请登录",
+    };
+  }
+});
 module.exports = router;

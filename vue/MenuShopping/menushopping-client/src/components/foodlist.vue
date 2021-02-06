@@ -37,7 +37,7 @@ export default {
   setup() {
     const router = useRouter();
     const goToDetail = (id) => {
-      router.push({ name: `/fooddetail/${id}` });
+      router.push({ path: `/fooddetail/${id}` });
     };
 
     return {

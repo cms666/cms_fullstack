@@ -5,8 +5,9 @@
         <van-swipe-cell v-for="item in cartlistcv" :key="item.id">
           <div class="cart-item" @click="goToDetail(item.materialid)">
             <van-checkbox
-              :name="item.id"
+              :name="item.materialid"
               checked-color="#14c965"
+              @click.stop="stopBob"
             ></van-checkbox>
             <div class="item-img">
               <img :src="item.material.url" alt="" />
@@ -24,15 +25,16 @@
                     v-model="value"
                     integer
                     :model-value="item.count"
-                    :name="item.id"
+                    :name="item.materialid"
                     @change="numChange"
+                    @click.stop="stopBob"
                   />
                 </div>
               </div>
             </div>
           </div>
 
-          <template #right>
+          <template #right v-if="cart">
             <van-button
               square
               type="danger"
@@ -65,7 +67,8 @@
           type="small"
           color="#14c965"
           class="btnsize"
-          @click.stop="goAddCart(item.id)"
+          @click.stop="goToAccount"
+          v-if="cart"
         >
           结算
         </van-button>
@@ -90,7 +93,9 @@ import { computed, reactive, toRefs, watch } from "vue";
 import { Toast } from "vant";
 import { updateCart, deleteCart } from "../../axios/interface/material";
 import { useStore } from "vuex";
-import router from "../router";
+import { useRouter } from 'vue-router';
+import {setLocal} from '../utils/utils'
+
 export default {
   props: {
     cartlist: {
@@ -99,13 +104,20 @@ export default {
         return [];
       },
     },
+    cart: {
+      type: Boolean,
+      default: true,
+    },
   },
   setup(props) {
+
     const store = useStore();
+    const router = useRouter()
     const state = reactive({
       checked: [],
       allchecked: true,
       cartlistcv: [],
+      total:0
     });
     //监听父组件第一次传过来的值
     watch(
@@ -114,37 +126,57 @@ export default {
         console.log("值传过来了");
         state.cartlistcv = props.cartlist;
         checkAll();
+        selectChange(state.checked);
       }
     );
     //增减数量
     const numChange = async (value, detail) => {
-      Toast.loading({
-        message: "修改中...",
-        forbidClick: true,
-      });
+      if (props.cart) {
+        Toast.loading({
+          message: "修改中...",
+          forbidClick: true,
+        });
+      }
+
       console.log(value, detail.name);
-      console.log(state.cartlistcv.filter((item) => item.id == detail.name));
+      console.log(
+        state.cartlistcv.filter((item) => item.materialid == detail.name)
+      );
       if (
-        state.cartlistcv.filter((item) => item.id == detail.name)[0].count ==
-        value
+        state.cartlistcv.filter((item) => item.materialid == detail.name)[0]
+          .count == value
       ) {
         return;
       }
-      let res = await updateCart({ id: detail.name, count: value });
-      console.log(res);
-      if (res.code == "80000") {
-        Toast.success(res.message);
+      if (props.cart) {
+        let res = await updateCart({ id: detail.name, count: value });
+        console.log(res);
+        if (res.code == "80000") {
+          Toast.success(res.message);
+          state.cartlistcv.filter(
+            (item) => item.materialid == detail.name
+          )[0].count = value;
+        } else {
+          Toast.fail(res.message);
+        }
+      } else {
         state.cartlistcv.filter(
           (item) => item.id == detail.name
         )[0].count = value;
-      } else {
-        Toast.fail(res.message);
       }
     };
 
     //选中与否
     const selectChange = (check) => {
       console.log(check);
+      let arr = []
+      check.forEach(item =>{
+        let obj = {}
+        obj.id = item
+        obj.count = state.cartlistcv.filter(item1=> item1.materialid == item)[0].count
+        arr.push(obj)
+      })
+      store.commit('selectCart',arr)
       if (check.length < state.cartlistcv.length) {
         state.allchecked = false;
       } else {
@@ -157,7 +189,7 @@ export default {
       // state.allchecked = !state.allchecked
       console.log(state.allchecked);
       if (state.allchecked) {
-        state.checked = state.cartlistcv.map((item) => item.id);
+        state.checked = state.cartlistcv.map((item) => item.materialid);
         console.log(state.checked);
       } else {
         state.checked = [];
@@ -167,13 +199,22 @@ export default {
     let price = computed(() => {
       let sum = 0;
       state.cartlistcv.forEach((item) => {
-        if (state.checked.includes(item.id)) {
+        if (state.checked.includes(item.materialid)) {
           sum += item.count * item.material.price;
         }
       });
+      state.total = sum
       return sum;
     });
-
+    //去结算
+    const goToAccount = () =>{
+      if(!state.checked.length){
+        Toast('请选择商品')
+        return
+      }
+      setLocal('account',JSON.stringify(store.state.cartselected))
+      router.push({path:'/account',query:{total: state.total}})
+    }
     //删除某件食材
     const deleteOne = async (id) => {
       Toast.loading({
@@ -199,6 +240,11 @@ export default {
     const goToDetail = (id) => {
       router.push({ path: `/materialdetail/${id}` });
     };
+
+    //阻止vant组件冒泡
+    const stopBob = () => {
+      console.log("阻止冒泡");
+    };
     return {
       ...toRefs(state),
       selectChange,
@@ -208,6 +254,8 @@ export default {
       deleteOne,
       goTo,
       goToDetail,
+      stopBob,
+      goToAccount,
     };
   },
 };
@@ -273,7 +321,7 @@ export default {
     box-sizing: border-box;
     position: fixed;
     left: 0;
-    bottom: 1.35rem;
+    bottom: 1.33rem;
     background-color: #fff;
     .btn {
       display: flex;

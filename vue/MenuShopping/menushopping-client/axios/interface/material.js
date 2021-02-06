@@ -46,3 +46,12 @@ export const getFoodDetail = (data) =>{
   })
 }
 
+//把菜的食材加入购物车
+export const addFoodCart = (data) =>{
+  return axios({
+    url: 'material/addFoodCart',
+    method: 'post',
+    data:data
+  })
+}
+

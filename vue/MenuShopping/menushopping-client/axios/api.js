@@ -18,7 +18,8 @@ export default function $axios(options) {
         if (
           config.method.toLocaleUpperCase() === "POST" ||
           config.method.toLocaleUpperCase() === "PUT" ||
-          config.method.toLocaleUpperCase() === "DELETE"
+          config.method.toLocaleUpperCase() === "DELETE" ||
+          config.method.toLocaleUpperCase() === "GET"
         ) {
           if(config.method.toLocaleUpperCase() === "POST" && !getLocal('token')){
             router.push({

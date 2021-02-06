@@ -9,13 +9,18 @@
     <div class="foodDetail-header">
       <div class="title">{{ foodDetail.name }}</div>
       <div class="price">
-        {{foodDetail.classify}}
+        {{ foodDetail.classify }}
       </div>
     </div>
     <div class="foodDetail-desc">
       <div class="distribution">
         <div class="tip">教程</div>
-        <div class="right"><router-link :to="{name:'video',params:{url:foodDetail.howdo}}"><van-icon name="tv-o" />看教程</router-link></div>
+        <div class="right">
+          <router-link
+            :to="{ path: '/video', query: { url: foodDetail.howdo } }"
+            ><van-icon name="tv-o" />看教程</router-link
+          >
+        </div>
       </div>
       <div class="desc">
         <div class="tip">详情</div>
@@ -23,33 +28,52 @@
       </div>
     </div>
   </div>
-      <van-action-bar>
-      <van-action-bar-icon icon="chat-o" text="客服" dot />
-      <van-action-bar-icon icon="cart-o" text="购物车" :badge="count ? count : ''" @click="goTo" />
-      <van-action-bar-button type="warning" text="加入购物车" @click="goAddCart"/>
-      <van-action-bar-button color="#14c965" text="立即购买" @click="goToBuy"/>
-    </van-action-bar>
+  <div class="material-title">主要食材</div>
+  <cartlist :cartlist="foodMaterial" :cart="false" />
+  <van-action-bar>
+    <van-action-bar-icon icon="chat-o" text="客服" dot />
+    <van-action-bar-icon
+      icon="cart-o"
+      text="购物车"
+      :badge="count ? count : ''"
+      @click="goTo"
+    />
+    <van-action-bar-button
+      type="warning"
+      text="加入购物车"
+      @click="goAddCart"
+    />
+    <van-action-bar-button color="#14c965" text="立即购买" @click="goToBuy" />
+  </van-action-bar>
 </template>
 
 <script>
-import { onMounted, reactive, toRefs,computed } from "vue";
+import { onMounted, reactive, toRefs, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import sheader from "../components/header";
-import { detail,addCart,getFoodDetail } from "../../axios/interface/material";
-import { useStore } from 'vuex';
+import cartlist from "../components/cartlist";
+import {
+  detail,
+  addCart,
+  getFoodDetail,
+  addFoodCart,
+} from "../../axios/interface/material";
+import { useStore } from "vuex";
 import { Toast } from "vant";
 
 export default {
   components: {
     sheader,
+    cartlist,
   },
   setup() {
     const route = useRoute();
-    const router = useRouter()
-    const store = useStore()
+    const router = useRouter();
+    const store = useStore();
+
     const state = reactive({
       foodDetail: {},
-      foodMaterial:[]
+      foodMaterial: [],
     });
 
     onMounted(async () => {
@@ -57,15 +81,16 @@ export default {
 
       let { data } = await getFoodDetail({ id: route.params.id });
       state.foodDetail = data.foodDetail;
-      state.foodMaterial = data.foodMaterial
+      state.foodMaterial = data.foodMaterial;
       console.log(data);
     });
-        // 角标
+
+    // 角标
     const count = computed(() => {
-      return store.state.cartCount
-    })
+      return store.state.cartCount;
+    });
     //加入购物车
-    const goAddCart = async ()=>{
+    const goAddCart = async () => {
       // let res = await addCart({id:state.foodDetail.id,count:1})
       // console.log(res);
       // if(res.code == '80000'){
@@ -74,11 +99,24 @@ export default {
       // }else{
       //   Toast.fail(res.message)
       // }
-    }
-    //去购物车 
-    const goTo = () =>{
-      router.push('/cart')
-    }
+      console.log("加入购物车");
+      console.log(store.state.cartselected);
+      if(!store.state.cartselected.length){
+        Toast('请选择商品')
+        return
+      }
+      let res = await addFoodCart(store.state.cartselected);
+      if (res.code == "80000") {
+        store.dispatch("updateCart");
+        Toast.success(res.message);
+      } else {
+        Toast.fail(res.message);
+      }
+    };
+    //去购物车
+    const goTo = () => {
+      router.push("/cart");
+    };
     return {
       ...toRefs(state),
       count,
@@ -99,7 +137,7 @@ export default {
   }
 }
 .foodDetail {
-  padding: 0.2rem 0.2rem 1.5rem;
+  padding: 0.2rem;
   background-color: @bc;
   .foodDetail-header {
     background-color: #fff;
@@ -134,9 +172,13 @@ export default {
       width: 10%;
       color: #999;
     }
-    .right{
+    .right {
       width: 90%;
     }
   }
+}
+.material-title {
+  text-align: center;
+  font-weight: 500;
 }
 </style>

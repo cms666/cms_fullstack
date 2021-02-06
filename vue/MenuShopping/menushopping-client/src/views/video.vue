@@ -1,24 +1,26 @@
 <template>
   <sheader :name="'看教程'" :back="'/home'" />
-<video-player
+  <video
+    controls
+    id="video"
+    preload="auto"
+    :src="playerOptions.sources[0].src"
+  ></video>
+  <!-- <video-player
       class="video-player vjs-custom-skin"
       ref="videoPlayer"
       :playsinline="true"
       :options="playerOptions"
-></video-player>
+></video-player> -->
 </template>
 
 <script>
 import sheader from "../components/header";
 import { onMounted, reactive, ref, toRefs } from "vue";
 import { useRoute } from "vue-router";
-import 'video.js/dist/video-js.css'
-
-import { videoPlayer } from 'vue-video-player'
 export default {
   components: {
     sheader,
-    videoPlayer
   },
   setup() {
     const route = useRoute();
@@ -36,31 +38,36 @@ export default {
         sources: [
           {
             type: "video/mp4", // 这里的种类支持很多种：基本视频格式、直播、流媒体等，具体可以参看git网址项目
-            src: '' // url地址
-          }
+            src: "", // url地址
+          },
         ],
-        poster: '', // 你的封面地址
+        poster: "", // 你的封面地址
         // width: document.documentElement.clientWidth, //播放器宽度
         notSupportedMessage: "此视频暂无法播放，请稍后再试", // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
         controlBar: {
           timeDivider: true,
           durationDisplay: true,
           remainingTimeDisplay: false,
-          fullscreenToggle: true // 全屏按钮
-        }
+          fullscreenToggle: true, // 全屏按钮
+        },
       },
-    })
+    });
 
     onMounted(() => {
-      console.log(route.params.url);
-      state.playerOptions.sources[0].src = route.params.url
+      console.log(route.query.url);
+      state.playerOptions.sources[0].src = route.query.url;
     });
     return {
-      ...toRefs(state)
+      ...toRefs(state),
     };
   },
 };
 </script>
 
-<style>
+<style lang='less' scoped>
+#video {
+  margin-top: 0.8rem;
+  width: 100%;
+  height: 6rem;
+}
 </style>
