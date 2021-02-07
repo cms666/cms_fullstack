@@ -1,14 +1,15 @@
 <template>
-  <sheader :name="'生成订单'" :back="'/home'" />
+  <sheader :name="'生成订单'" :back="from" />
   <div class="main">
-    <div class="address">
-      <div class="left">
+    <div class="address" @click="goToAddress">
+      <div class="tip" v-if="!hasAddress">请选择地址</div>
+      <div class="left" v-else>
         <div class="top">
-          <span class="name">名字</span><span class="phone">联系方式</span>
+          <span class="name">{{address.name}}</span><span class="phone">{{address.tel}}</span>
         </div>
-        <div class="bottom">地址</div>
+        <div class="bottom">{{address.province}} {{address.city}} {{address.county}} {{address.addressDetail}}</div>
       </div>
-      <van-icon name="arrow" />
+      <van-icon name="arrow" class="arrow-icon"/>
     </div>
     <div class="material-list">
       <div class="cart-item" v-for="item in materialList" :key="item.id">
@@ -53,22 +54,43 @@
 
 <script>
 import { computed, onMounted, reactive, toRefs } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import sheader from "../components/header";
 import { getLocal } from "../utils/utils";
-import { account } from "../../axios/interface/user";
+import { account,getAddress,getDefaultAddress} from "../../axios/interface/user";
+import {  Toast } from 'vant';
 export default {
   components: {
     sheader,
   },
   setup() {
     const route = useRoute();
+    const router = useRouter()
     const state = reactive({
+      from:'/cart',
       materialList: [],
+      address:{},
+      hasAddress:true
     });
     onMounted(async () => {
       console.log(JSON.parse(getLocal("account")));
       let accountdata = JSON.parse(getLocal("account"));
+      if(route.query.addressid){
+        let res = await getAddress({id:route.query.addressid})
+        console.log(res);
+        if(res.code == '80000'){
+          state.address = res.data
+        }
+      }else{
+        state.from = '-1'
+        let res = await getDefaultAddress()
+        if(res.code == '80000'){
+          state.address = res.data
+        }else{
+          state.hasAddress = false
+          Toast('请选择地址')
+        }
+      }
       let res = await account(accountdata);
       console.log(res);
       if (res.code == "80000") {
@@ -82,9 +104,13 @@ export default {
       });
       return sum;
     });
+    const goToAddress = () =>{
+      router.push({path:'/address',query:{from:'/account'}})
+    }
     return {
       ...toRefs(state),
       total,
+      goToAddress
     };
   },
 };
@@ -110,6 +136,9 @@ export default {
       .phone {
         color: #999;
       }
+    }
+    .arrow-icon{
+      font-size: 0.5rem;
     }
   }
   .material-list {

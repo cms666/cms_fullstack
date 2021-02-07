@@ -1,5 +1,5 @@
 <template>
-  <sheader :name="'食材详情'" :back="'/home'" />
+  <sheader :name="'食材详情'" />
   <van-swipe class="my-swipe" :autoplay="3000" indicator-color="#1baeae">
     <van-swipe-item v-for="item in 1">
       <img :src="material.url" alt="" />

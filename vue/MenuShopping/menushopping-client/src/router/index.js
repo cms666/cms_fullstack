@@ -42,6 +42,16 @@ const routes = [
     name: "account",
     component: () => import("../views/account"),
   },
+  {
+    path: "/address",
+    name: "address",
+    component: () => import("../views/address"),
+  },
+  {
+    path: "/addAddress",
+    name: "addAddress",
+    component: () => import("../views/addAddress"),
+  },
 ];
 
 const router = createRouter({

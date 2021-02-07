@@ -1,5 +1,5 @@
 <template>
-  <sheader :name="'看教程'" :back="'/home'" />
+  <sheader :name="'看教程'" :back="'-1'" />
   <video
     controls
     id="video"

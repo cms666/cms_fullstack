@@ -21,6 +21,8 @@ import {
   SubmitBar,
   Empty,
   SwipeCell,
+  AddressList,
+  AddressEdit,
 } from "vant";
 import "vant/lib/index.css";
 const app = createApp(App);
@@ -33,12 +35,11 @@ app.config.globalProperties.$filters = {
     }
   },
 };
-import VueVideoPlayer from 'vue-video-player'
+import VueVideoPlayer from "vue-video-player";
 
 // require videojs style
-import 'video.js/dist/video-js.css'
+import "video.js/dist/video-js.css";
 // import 'vue-video-player/src/custom-theme.css'
-
 
 app.use(VueVideoPlayer);
 
@@ -60,6 +61,8 @@ app
   .use(SubmitBar)
   .use(Empty)
   .use(SwipeCell)
+  .use(AddressList)
+  .use(AddressEdit)
   .use(store)
   .use(router)
   .mount("#app");

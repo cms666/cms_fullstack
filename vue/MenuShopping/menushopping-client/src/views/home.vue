@@ -20,8 +20,8 @@
       </div>
     </div>
   </div>
-  <foodlist :title="'爆火菜品'" :foods = "homeFoodList"/>
-  <material :title="'新鲜食材'" :materials = "homeMaterialList"/>
+  <foodlist :title="'爆火菜品'" :foods="homeFoodList" />
+  <material :title="'新鲜食材'" :materials="homeMaterialList" />
   <snavbar />
 </template>
 
@@ -30,12 +30,12 @@ import { reactive, toRefs, onMounted } from "vue";
 import snavbar from "../components/navbar";
 import swiper from "../components/swiper";
 import foodlist from "../components/foodlist";
-import material from '../components/materiallist'
+import material from "../components/materiallist";
 import { useRouter } from "vue-router";
 import { home } from "../../axios/interface/home";
 import { getLocal } from "../utils/utils";
 import { Toast } from "vant";
-import { useStore } from 'vuex'
+import { useStore } from "vuex";
 
 export default {
   components: {
@@ -46,7 +46,7 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const store = useStore()
+    const store = useStore();
 
     const state = reactive({
       categoryList: [
@@ -100,15 +100,15 @@ export default {
       router.push("/search");
     };
     onMounted(async () => {
-      const token = getLocal("token");
-      if (token) {
-        state.isLogin = true;
-        store.dispatch('updateCart')
-      }
       Toast.loading({
         message: "加载中...",
         forbidClick: true,
       });
+      const token = getLocal("token");
+      if (token) {
+        state.isLogin = true;
+        store.dispatch("updateCart");
+      }
       const { data } = await home();
       Toast.clear();
       console.log(data);

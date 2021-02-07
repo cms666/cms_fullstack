@@ -23,3 +23,45 @@ export const account = (data) => {
     params: data,
   });
 };
+
+export const getAddress = (data) => {
+  return axios({
+    url: "users/getAddress",
+    method: "get",
+    params: data,
+  });
+};
+
+export const getDefaultAddress = () => {
+  return axios({
+    url: "users/getDefaultAddress",
+    method: "get",
+  });
+};
+
+export const addAddress = (data) => {
+  return axios({
+    url: "users/addAddress",
+    method: "post",
+    data:data
+  });
+};
+
+export const getAllAddress = () => {
+  return axios({
+    url: "users/getAllAddress",
+    method: "get",
+  });
+};
+
+export const deleteAddress = (id) => {
+  return axios({
+    url: "users/deleteAddress",
+    method: "delete",
+    params:id
+  });
+};
+
+
+
+

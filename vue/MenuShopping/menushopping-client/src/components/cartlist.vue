@@ -218,7 +218,7 @@ export default {
     //删除某件食材
     const deleteOne = async (id) => {
       Toast.loading({
-        message: "修改中...",
+        message: "删除中...",
         forbidClick: true,
       });
       let res = await deleteCart({ id: id });
