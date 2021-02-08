@@ -1,12 +1,13 @@
 <template>
   <div class="address-edit-box">
-    <sheader :name="'新增地址'" :back="'-1'" />
+    <sheader :name="type == 'add' ? '新增地址' : '编辑地址'" :back="'-1'" />
     <van-address-edit
       :area-list="areaList"
       show-postal
       show-set-default
       show-search-result
       :search-result="searchResult"
+      :address-info="addressInfo"
       :area-columns-placeholder="['请选择', '请选择', '请选择']"
       @save="onSave"
       @delete="onDelete"
@@ -20,7 +21,7 @@ import { onMounted, reactive, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import sheader from "../components/header";
 import { tdist } from "../utils/utils";
-import { addAddress } from "../../axios/interface/user";
+import { addAddress, getAddress,editAddress} from "../../axios/interface/address";
 import { Toast } from "vant";
 
 export default {
@@ -32,13 +33,16 @@ export default {
     const router = useRouter();
     const state = reactive({
       from: route.query.from,
+      type: route.query.type,
       areaList: {
         province_list: {},
         city_list: {},
         county_list: {},
       },
+      addressInfo: {},
+      addressid:'',
     });
-    onMounted(() => {
+    onMounted(async () => {
       // 省市区列表构建
       let _province_list = {};
       let _city_list = {};
@@ -55,17 +59,60 @@ export default {
       state.areaList.province_list = _province_list;
       state.areaList.city_list = _city_list;
       state.areaList.county_list = _county_list;
+      if (state.type == "edit") {
+        let { data } = await getAddress({ id: route.query.addressid });
+        state.addressid = data.id
+        console.log(data);
+        const toCode = (area, code) => {
+          for (let key in tdist)
+            if (tdist[key][0] == area && tdist[key][1] == code) return key;
+        };
+        // 拿到省级code，利用省级code找到市级code，利用市级code找到区对应的code
+        let provinceCode = toCode(data.province, "1"); // 1
+        let cityCode = toCode(data.city, provinceCode); // 110000
+        let regionCode = toCode(data.county, cityCode); // 231283  // 110104
+        state.addressInfo = {
+          id: data.id,
+          name: data.name,
+          tel: data.tel,
+          province: data.province,
+          city: data.city,
+          county: data.county,
+          addressDetail: data.addressDetail,
+          postalCode:data.postalCode,
+          areaCode: regionCode,
+          isDefault: !!data.isDefault.data[0],
+        };
+      }
     });
 
-    //保存地址
+    //保存地址 or 修改地址
     const onSave = async (e) => {
       console.log(e);
-      let res = await addAddress(e);
-      if (res.code == "80000") {
-        Toast.success(res.message);
-        router.push({path:'/address',query:{from:route.query.from}})
+      if (state.type == "add") {
+        let res = await addAddress(e);
+        if (res.code == "80000") {
+          Toast.success(res.message);
+          setTimeout(() => {
+            router.push({ path: "/address", query: { from: state.from } });
+          }, 500);
+        } else {
+          Toast.fail(res.message);
+        }
       } else {
-        Toast.fail(res.message);
+        let data = {}
+        data = e
+        data.id = state.addressid
+        let res = await editAddress(data);
+        if (res.code == "80000") {
+          Toast.success(res.message);
+          setTimeout(() => {
+            router.push({ path: "/address", query: { from: state.from } });
+          }, 500);
+          
+        } else {
+          Toast.fail(res.message);
+        }
       }
     };
     return {
@@ -76,7 +123,7 @@ export default {
 };
 </script>
 
-<style lang="less" >
+<style lang="less">
 @import "../assets/mixin";
 .address-edit-box {
   margin-top: 1rem;

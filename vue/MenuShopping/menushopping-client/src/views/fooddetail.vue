@@ -52,6 +52,8 @@ import { onMounted, reactive, toRefs, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import sheader from "../components/header";
 import cartlist from "../components/cartlist";
+import {setLocal} from '../utils/utils'
+
 import {
   detail,
   addCart,
@@ -101,9 +103,9 @@ export default {
       // }
       console.log("加入购物车");
       console.log(store.state.cartselected);
-      if(!store.state.cartselected.length){
-        Toast('请选择商品')
-        return
+      if (!store.state.cartselected.length) {
+        Toast("请选择商品");
+        return;
       }
       let res = await addFoodCart(store.state.cartselected);
       if (res.code == "80000") {
@@ -117,11 +119,22 @@ export default {
     const goTo = () => {
       router.push("/cart");
     };
+
+    //立即购买
+    const goToBuy = () => {
+      if (!store.state.cartselected.length) {
+        Toast("请选择商品");
+        return;
+      }
+      setLocal("account", JSON.stringify(store.state.cartselected));
+      router.push({ path: "/account" });
+    };
     return {
       ...toRefs(state),
       count,
       goAddCart,
       goTo,
+      goToBuy,
     };
   },
 };

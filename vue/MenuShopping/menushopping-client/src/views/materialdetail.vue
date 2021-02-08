@@ -1,5 +1,5 @@
 <template>
-  <sheader :name="'食材详情'" />
+  <sheader :name="'食材详情'" :back="'-1'" />
   <van-swipe class="my-swipe" :autoplay="3000" indicator-color="#1baeae">
     <van-swipe-item v-for="item in 1">
       <img :src="material.url" alt="" />
@@ -24,21 +24,31 @@
       </div>
     </div>
   </div>
-      <van-action-bar>
-      <van-action-bar-icon icon="chat-o" text="客服" dot />
-      <van-action-bar-icon icon="cart-o" text="购物车" :badge="count ? count : ''" @click="goTo" />
-      <van-action-bar-button type="warning" text="加入购物车" @click="goAddCart"/>
-      <van-action-bar-button color="#14c965" text="立即购买" @click="goToBuy"/>
-    </van-action-bar>
+  <van-action-bar>
+    <van-action-bar-icon icon="chat-o" text="客服" dot />
+    <van-action-bar-icon
+      icon="cart-o"
+      text="购物车"
+      :badge="count ? count : ''"
+      @click="goTo"
+    />
+    <van-action-bar-button
+      type="warning"
+      text="加入购物车"
+      @click="goAddCart"
+    />
+    <van-action-bar-button color="#14c965" text="立即购买" @click="goToBuy" />
+  </van-action-bar>
 </template>
 
 <script>
-import { onMounted, reactive, toRefs,computed } from "vue";
+import { onMounted, reactive, toRefs, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import sheader from "../components/header";
-import { detail,addCart } from "../../axios/interface/material";
-import { useStore } from 'vuex';
+import { detail, addCart } from "../../axios/interface/material";
+import { useStore } from "vuex";
 import { Toast } from "vant";
+import { setLocal } from "../utils/utils";
 
 export default {
   components: {
@@ -46,8 +56,8 @@ export default {
   },
   setup() {
     const route = useRoute();
-    const router = useRouter()
-    const store = useStore()
+    const router = useRouter();
+    const store = useStore();
     const state = reactive({
       material: {},
     });
@@ -59,30 +69,39 @@ export default {
       state.material = data;
       console.log(state.material);
     });
-        // 角标
+    // 角标
     const count = computed(() => {
-      return store.state.cartCount
-    })
+      return store.state.cartCount;
+    });
     //加入购物车
-    const goAddCart = async ()=>{
-      let res = await addCart({id:state.material.id,count:1})
+    const goAddCart = async () => {
+      let res = await addCart({ id: state.material.id, count: 1 });
       console.log(res);
-      if(res.code == '80000'){
-        store.dispatch('updateCart')
-        Toast.success(res.message)
-      }else{
-        Toast.fail(res.message)
+      if (res.code == "80000") {
+        store.dispatch("updateCart");
+        Toast.success(res.message);
+      } else {
+        Toast.fail(res.message);
       }
-    }
-    //去购物车 
-    const goTo = () =>{
-      router.push('/cart')
-    }
+    };
+    //去购物车
+    const goTo = () => {
+      router.push("/cart");
+    };
+    //立即购买
+    const goToBuy = () => {
+      setLocal(
+        "account",
+        JSON.stringify([{ id: state.material.id, count: 1 }])
+      );
+      router.push({ path: "/account" });
+    };
     return {
       ...toRefs(state),
       count,
       goAddCart,
       goTo,
+      goToBuy,
     };
   },
 };
@@ -133,7 +152,7 @@ export default {
       width: 10%;
       color: #999;
     }
-    .right{
+    .right {
       width: 90%;
     }
   }

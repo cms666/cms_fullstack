@@ -14,7 +14,7 @@
             {{ item.addressDetail }}
           </div>
         </div>
-        <van-icon name="edit" class="edit-icon" />
+        <van-icon name="edit" class="edit-icon"  @click.stop="editAddress(item.id)"/>
       </div>
       <template #right>
         <van-button
@@ -46,7 +46,7 @@
 import { onMounted, reactive, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import sheader from "../components/header";
-import { getAllAddress, deleteAddress } from "../../axios/interface/user";
+import { getAllAddress, deleteAddress } from "../../axios/interface/address";
 import { Toast } from "vant";
 export default {
   components: {
@@ -92,14 +92,23 @@ export default {
         router.push({ path: "/account", query: { addressid: id } });
       }
     };
+
+    //新增地址
     const addAddress = () => {
-      router.push({ path: "/addAddress", query: { from: state.from } });
+      router.push({ path: "/addAddress", query: { from: state.from ,type:'add'} });
     };
+
+    //编辑地址
+    const editAddress = (id) =>{
+      console.log(id);
+      router.push({ path: "/addAddress", query: { from: state.from ,type:'edit',addressid:id} });
+    }
     return {
       ...toRefs(state),
       addAddress,
       deleteOne,
       selectAddress,
+      editAddress
     };
   },
 };

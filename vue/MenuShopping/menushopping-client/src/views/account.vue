@@ -5,11 +5,15 @@
       <div class="tip" v-if="!hasAddress">请选择地址</div>
       <div class="left" v-else>
         <div class="top">
-          <span class="name">{{address.name}}</span><span class="phone">{{address.tel}}</span>
+          <span class="name">{{ address.name }}</span
+          ><span class="phone">{{ address.tel }}</span>
         </div>
-        <div class="bottom">{{address.province}} {{address.city}} {{address.county}} {{address.addressDetail}}</div>
+        <div class="bottom">
+          {{ address.province }} {{ address.city }} {{ address.county }}
+          {{ address.addressDetail }}
+        </div>
       </div>
-      <van-icon name="arrow" class="arrow-icon"/>
+      <van-icon name="arrow" class="arrow-icon" />
     </div>
     <div class="material-list">
       <div class="cart-item" v-for="item in materialList" :key="item.id">
@@ -50,6 +54,19 @@
       </van-button>
     </div>
   </div>
+  <van-popup
+    v-model:show="show"
+    closeable
+    @click-close-icon="cancelPay"
+    position="bottom"
+    :style="{ height: '30%' }"
+  >
+    <div class="zw">
+      <p>请支付</p>
+      <img src="../assets/指纹.png" alt="" v-if="payicon" @click="finishPay" />
+      <img src="../assets/指纹-绿.png" alt="" v-else />
+    </div>
+  </van-popup>
 </template>
 
 <script>
@@ -57,41 +74,52 @@ import { computed, onMounted, reactive, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import sheader from "../components/header";
 import { getLocal } from "../utils/utils";
-import { account,getAddress,getDefaultAddress} from "../../axios/interface/user";
-import {  Toast } from 'vant';
+import {
+  account,
+  getAddress,
+  getDefaultAddress,
+} from "../../axios/interface/address";
+import { createOrder } from "../../axios/interface/order";
+import { Toast } from "vant";
+import { useStore } from "vuex";
 export default {
   components: {
     sheader,
   },
   setup() {
     const route = useRoute();
-    const router = useRouter()
+    const router = useRouter();
+    const store = useStore();
     const state = reactive({
-      from:'/cart',
+      from: "/cart",
       materialList: [],
-      address:{},
-      hasAddress:true
+      address: {},
+      hasAddress: true,
+      show: false,
+      payicon: true,
+      accountdata: [],
+      curprice: 0,
     });
     onMounted(async () => {
       console.log(JSON.parse(getLocal("account")));
-      let accountdata = JSON.parse(getLocal("account"));
-      if(route.query.addressid){
-        let res = await getAddress({id:route.query.addressid})
+      state.accountdata = JSON.parse(getLocal("account"));
+      if (route.query.addressid) {
+        let res = await getAddress({ id: route.query.addressid });
         console.log(res);
-        if(res.code == '80000'){
-          state.address = res.data
+        if (res.code == "80000") {
+          state.address = res.data;
         }
-      }else{
-        state.from = '-1'
-        let res = await getDefaultAddress()
-        if(res.code == '80000'){
-          state.address = res.data
-        }else{
-          state.hasAddress = false
-          Toast('请选择地址')
+      } else {
+        state.from = "-1";
+        let res = await getDefaultAddress();
+        if (res.code == "80000") {
+          state.address = res.data;
+        } else {
+          state.hasAddress = false;
+          Toast("请选择地址");
         }
       }
-      let res = await account(accountdata);
+      let res = await account(state.accountdata);
       console.log(res);
       if (res.code == "80000") {
         state.materialList = res.data;
@@ -102,15 +130,84 @@ export default {
       state.materialList.forEach((item) => {
         sum += item.price * item.count;
       });
+      state.curprice = sum;
       return sum;
     });
-    const goToAddress = () =>{
-      router.push({path:'/address',query:{from:'/account'}})
-    }
+    const goToAddress = () => {
+      router.push({ path: "/address", query: { from: "/account" } });
+    };
+    //结算
+    const goToAccount = () => {
+      if (!state.hasAddress) {
+        Toast("请选择地址");
+        return;
+      }
+      state.show = true;
+    };
+
+    //完成支付
+    const finishPay = async () => {
+      Toast.loading({
+        message: "加载中...",
+        forbidClick: true,
+      });
+      state.payicon = false;
+      let obj = {};
+      obj.id = Date.now();
+      obj.address =
+        state.address.province +
+        state.address.city +
+        state.address.county +
+        state.address.addressDetail;
+      obj.total = state.curprice;
+      obj.ispay = true;
+      obj.orderlist = state.accountdata;
+      let res = await createOrder(obj);
+      console.log(res);
+      if (res.code == "80000") {
+        store.dispatch("updateCart");
+        localStorage.removeItem('account')
+
+        Toast.success(res.message);
+        setTimeout(() => {
+          router.push({path:'/orderdetail',query:{id:obj.id}})
+
+        }, 500);
+      } else {
+        Toast.fail(res.message);
+      }
+    };
+
+    //取消支付
+    const cancelPay = async () => {
+            let obj = {};
+      obj.id = Date.now();
+      obj.address =
+        state.address.province +
+        state.address.city +
+        state.address.county +
+        state.address.addressDetail;
+      obj.total = state.curprice;
+      obj.ispay = false;
+      obj.orderlist = state.accountdata;
+      let res = await createOrder(obj);
+      console.log(res);
+      if (res.code == "80000") {
+        Toast('取消支付')
+        store.dispatch("updateCart");
+        localStorage.clear('account')
+        setTimeout(() => {
+          router.push({path:'/orderdetail',query:{id:obj.id}})
+        }, 500)
+      }
+    };
     return {
       ...toRefs(state),
       total,
-      goToAddress
+      goToAddress,
+      goToAccount,
+      cancelPay,
+      finishPay,
     };
   },
 };
@@ -137,7 +234,7 @@ export default {
         color: #999;
       }
     }
-    .arrow-icon{
+    .arrow-icon {
       font-size: 0.5rem;
     }
   }
@@ -222,6 +319,16 @@ export default {
       margin-left: 0.2rem;
       width: 2rem;
     }
+  }
+}
+.zw {
+  text-align: center;
+  img {
+    .wh(1.8rem,1.8rem);
+    display: block;
+    margin-left: 50%;
+    margin-top: 15%;
+    transform: translate(-50%);
   }
 }
 </style>

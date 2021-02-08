@@ -52,6 +52,11 @@ const routes = [
     name: "addAddress",
     component: () => import("../views/addAddress"),
   },
+  {
+    path: "/orderdetail",
+    name: "orderdetail",
+    component: () => import("../views/orderdetail"),
+  },
 ];
 
 const router = createRouter({

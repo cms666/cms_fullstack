@@ -71,7 +71,10 @@ export default {
         console.log(res);
         if (res.code === "80000") {
           setLocal("token", res.data.id);
-          router.push("/home");
+          setTimeout(() => {
+            router.push("/home");
+          }, 500);
+          
         }
         if (res.code === "80004") {
           Toast.fail(res.message);

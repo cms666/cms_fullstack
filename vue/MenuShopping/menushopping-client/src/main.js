@@ -23,6 +23,7 @@ import {
   SwipeCell,
   AddressList,
   AddressEdit,
+  Popup,
 } from "vant";
 import "vant/lib/index.css";
 const app = createApp(App);
@@ -63,6 +64,7 @@ app
   .use(SwipeCell)
   .use(AddressList)
   .use(AddressEdit)
+  .use(Popup)
   .use(store)
   .use(router)
   .mount("#app");

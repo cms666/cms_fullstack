@@ -93,8 +93,8 @@ import { computed, reactive, toRefs, watch } from "vue";
 import { Toast } from "vant";
 import { updateCart, deleteCart } from "../../axios/interface/material";
 import { useStore } from "vuex";
-import { useRouter } from 'vue-router';
-import {setLocal} from '../utils/utils'
+import { useRouter } from "vue-router";
+import { setLocal } from "../utils/utils";
 
 export default {
   props: {
@@ -110,14 +110,13 @@ export default {
     },
   },
   setup(props) {
-
     const store = useStore();
-    const router = useRouter()
+    const router = useRouter();
     const state = reactive({
       checked: [],
       allchecked: true,
       cartlistcv: [],
-      total:0
+      total: 0,
     });
     //监听父组件第一次传过来的值
     watch(
@@ -129,6 +128,20 @@ export default {
         selectChange(state.checked);
       }
     );
+
+    //全局选中食材数据
+    const globalMaterial = (check) => {
+      let arr = [];
+      check.forEach((item) => {
+        let obj = {};
+        obj.id = item;
+        obj.count = state.cartlistcv.filter(
+          (item1) => item1.materialid == item
+        )[0].count;
+        arr.push(obj);
+      });
+      store.commit("selectCart", arr);
+    };
     //增减数量
     const numChange = async (value, detail) => {
       if (props.cart) {
@@ -164,19 +177,13 @@ export default {
           (item) => item.id == detail.name
         )[0].count = value;
       }
+      globalMaterial(state.checked);
     };
 
     //选中与否
     const selectChange = (check) => {
       console.log(check);
-      let arr = []
-      check.forEach(item =>{
-        let obj = {}
-        obj.id = item
-        obj.count = state.cartlistcv.filter(item1=> item1.materialid == item)[0].count
-        arr.push(obj)
-      })
-      store.commit('selectCart',arr)
+      globalMaterial(check);
       if (check.length < state.cartlistcv.length) {
         state.allchecked = false;
       } else {
@@ -203,18 +210,18 @@ export default {
           sum += item.count * item.material.price;
         }
       });
-      state.total = sum
+      state.total = sum;
       return sum;
     });
     //去结算
-    const goToAccount = () =>{
-      if(!state.checked.length){
-        Toast('请选择商品')
-        return
+    const goToAccount = () => {
+      if (!state.checked.length) {
+        Toast("请选择商品");
+        return;
       }
-      setLocal('account',JSON.stringify(store.state.cartselected))
-      router.push({path:'/account',query:{total: state.total}})
-    }
+      setLocal("account", JSON.stringify(store.state.cartselected));
+      router.push({ path: "/account", query: { total: state.total } });
+    };
     //删除某件食材
     const deleteOne = async (id) => {
       Toast.loading({

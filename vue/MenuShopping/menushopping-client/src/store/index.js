@@ -1,27 +1,28 @@
-import { createStore } from 'vuex'
-import {getCart} from '../../axios/interface/material'
+import { createStore } from "vuex";
+import { getCart } from "../../axios/interface/material";
 export default createStore({
   state: {
-    cartCount:0,
-    cartselected:[]
+    cartCount: 0,
+    cartselected: [],
   },
   mutations: {
-    addCart(state,payload){
-      state.cartCount = payload.count
+    addCart(state, payload) {
+      state.cartCount = payload.count;
     },
-    selectCart(state,payload){
-      state.cartselected = payload
-    }
+    selectCart(state, payload) {
+      state.cartselected = payload;
+    },
   },
   actions: {
-    async updateCart(ctx){
-      const {data} = await getCart() 
-       console.log(data);
-      ctx.commit('addCart',{
-        count:data.length || 0
-      })
-    }
+    async updateCart(ctx) {
+      const res = await getCart();
+      if (res.code == "80000") {
+        console.log(res.data);
+        ctx.commit("addCart", {
+          count: res.data.length || 0,
+        });
+      }
+    },
   },
-  modules: {
-  }
-})
+  modules: {},
+});
