@@ -1,5 +1,5 @@
-const getCurrentDate = () => {
-  let date = new Date(); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+const formatDate = (time) => {
+  let date = new Date(time); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
   let Y = date.getFullYear() + "/";
   let M =
     (date.getMonth() + 1 < 10
@@ -12,4 +12,4 @@ const getCurrentDate = () => {
   return Y + M + D + h + m;
 };
 
-module.exports = { getCurrentDate};
+module.exports = { formatDate};

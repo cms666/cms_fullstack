@@ -32,13 +32,13 @@ let allServices = {
 
 // 登录
 let userLogin = function (username, userpwd) {
-  let _sql = `select * from users where username="${username}" AND password="${userpwd}"`;
+  let _sql = `select * from users where username=${username} AND password=${userpwd}`;
   return allServices.query(_sql);
 };
 
 // 查找用户
 let findUser = function (username) {
-  let _sql = `select * from users where username="${username}"`;
+  let _sql = `select * from users where username=${username}`;
   return allServices.query(_sql);
 };
 
@@ -68,7 +68,7 @@ let findHomeMaterialList = function () {
 
 // 查找原材料详情
 let findMaterialDetail = function (id) {
-  let _sql = `select * from material where id="${id}"`;
+  let _sql = `select * from material where id=${id}`;
   return allServices.query(_sql);
 };
 
@@ -79,12 +79,12 @@ let addCart = function (value) {
 };
 //查找购物车里是否有食材
 let findCartMaterial = function (token, materialid) {
-  let _sql = `select * from cart where userid="${token}" and materialid="${materialid}"`;
+  let _sql = `select * from cart where userid=${token} and materialid=${materialid}`;
   return allServices.query(_sql);
 };
 //查询用户购物车
 let findUserCart = function (token) {
-  let _sql = `select * from cart where userid="${token}"`;
+  let _sql = `select * from cart where userid=${token}`;
   return allServices.query(_sql);
 };
 
@@ -94,9 +94,15 @@ let updateCart = function (value) {
   return allServices.query(_sql, value);
 };
 
-//删除购物车某件食材
+//根据id删除购物车某件食材
 let deleteCart = function (id) {
   let _sql = `delete from cart where id=${id}`;
+  return allServices.query(_sql);
+};
+
+//根据用户id和食材id删除购物车某件食材
+let deleteCartByToken = function (token, id) {
+  let _sql = `delete from cart where userid=${token} and materialid=${id}`;
   return allServices.query(_sql);
 };
 
@@ -148,6 +154,37 @@ let deleteAddress = function (id) {
   return allServices.query(_sql);
 };
 
+//修改地址
+let editAddress = function(value){
+  let _sql = `update address set name=?,tel=?,province=?,city=?,county=?,addressDetail=?,postalCode=?,isDefault=? where id=?`;
+  return allServices.query(_sql, value);
+}
+
+//创建订单
+let createOrder = function (value) {
+  let _sql = `insert into orders set orderid=?,userid=?,time=?,address=?,total=?,ispay=?,isclose=?`;
+  // let _sql = `select * from order`; //为啥不能用order?order是MySQL保留字
+  return allServices.query(_sql, value);
+};
+
+//创建订单食材信息
+let createOrderList = function (value){
+  let _sql = `insert into orderlist set orderid=?,materialid=?,count=?`;
+  return allServices.query(_sql, value);
+}
+
+//查询订单详情
+let getOrderDetail = function(id){
+  let _sql = `select * from orders where orderid=${id}`;
+  return allServices.query(_sql);
+}
+
+//查询订单食材列表
+let getOrderDetailList = function(id){
+  let _sql = `select * from orderlist where orderid=${id}`;
+  return allServices.query(_sql);
+}
+
 module.exports = {
   userLogin,
   findUser,
@@ -161,6 +198,7 @@ module.exports = {
   findUserCart,
   updateCart,
   deleteCart,
+  deleteCartByToken,
   getFoodDetail,
   getFoodMaterial,
   getAddress,
@@ -168,5 +206,10 @@ module.exports = {
   addAddress,
   updateDefaultAddress,
   getAllAddress,
-  deleteAddress
+  deleteAddress,
+  editAddress,
+  createOrder,
+  createOrderList,
+  getOrderDetail,
+  getOrderDetailList,
 };
