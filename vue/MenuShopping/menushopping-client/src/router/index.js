@@ -57,6 +57,11 @@ const routes = [
     name: "orderdetail",
     component: () => import("../views/orderdetail"),
   },
+  {
+    path: "/myorder",
+    name: "myorder",
+    component: () => import("../views/myorder"),
+  },
 ];
 
 const router = createRouter({

@@ -58,14 +58,18 @@ export default function $axios(options) {
           data = response.data;
         }
         // data = JSON.parse(data);
-        const message = data.msg || "Error";
+        const message = data.message || "Error";
         switch (data.code) {
-          case 0:
+          case '80002' || '80003' || '80001':
+            Toast({
+              message,
+              duration: 1000,
+            }); break;
+          case '80004' :
             Toast.fail({
               message,
               duration: 1000,
-            });
-            return Promise.reject(message);
+            }); break;
           default:
         }
         return data;

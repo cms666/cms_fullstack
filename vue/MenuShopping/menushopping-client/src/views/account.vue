@@ -15,23 +15,7 @@
       </div>
       <van-icon name="arrow" class="arrow-icon" />
     </div>
-    <div class="material-list">
-      <div class="cart-item" v-for="item in materialList" :key="item.id">
-        <div class="item-img">
-          <img :src="item.url" alt="" />
-        </div>
-        <div class="desc">
-          <div class="title">{{ item.name }}</div>
-          <div class="count">X{{ item.count }}</div>
-          <div class="bottom">
-            <div class="price">
-              ￥<span>{{ item.price }}</span
-              >.00
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <orderlist :orderDetailList="materialList"/>
     <div class="create-order">
       <i>&nbsp;</i>
       <div class="total">
@@ -73,6 +57,7 @@
 import { computed, onMounted, reactive, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import sheader from "../components/header";
+import orderlist from "../components/orderlist";
 import { getLocal } from "../utils/utils";
 import {
   account,
@@ -85,8 +70,9 @@ import { useStore } from "vuex";
 export default {
   components: {
     sheader,
+    orderlist
   },
-  setup() {
+  setup(){
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
@@ -195,7 +181,7 @@ export default {
       if (res.code == "80000") {
         Toast('取消支付')
         store.dispatch("updateCart");
-        localStorage.clear('account')
+        localStorage.removeItem('account')
         setTimeout(() => {
           router.push({path:'/orderdetail',query:{id:obj.id}})
         }, 500)
@@ -236,58 +222,6 @@ export default {
     }
     .arrow-icon {
       font-size: 0.5rem;
-    }
-  }
-  .material-list {
-    .cart-item:first-child {
-      border-top-right-radius: 0.2rem;
-      border-top-left-radius: 0.2rem;
-    }
-    .cart-item:last-child {
-      border-bottom-right-radius: 0.2rem;
-      border-bottom-left-radius: 0.2rem;
-    }
-    .cart-item {
-      display: flex;
-      background-color: #fff;
-      padding: 0.2rem;
-      .item-img {
-        img {
-          .wh(2.5rem,2.5rem);
-          border-radius: 0.2rem;
-        }
-      }
-      .desc {
-        margin-left: 0.2rem;
-        display: flex;
-        width: 5.6rem;
-        justify-content: space-between;
-        flex-direction: column;
-
-        .title {
-          width: 5.4rem;
-          overflow: hidden;
-          white-space: nowrap;
-          font-size: 0.4rem;
-        }
-        .count {
-          color: #999;
-        }
-        .bottom {
-          .fj();
-          .price {
-            color: @primary;
-            span {
-              font-size: 0.5rem;
-            }
-          }
-        }
-      }
-    }
-    .delete-button {
-      margin-right: 0.01rem;
-      height: 100%;
-      width: 1.8rem;
     }
   }
   .create-order {

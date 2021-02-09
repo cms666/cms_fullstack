@@ -7,7 +7,7 @@
         ><span class="content">{{ orderDetail.orderid }}</span>
       </div>
       <div class="item-desc">
-        <span class="tip">状态</span><span class="content">{{classify}}</span>
+        <span class="tip">状态</span><span class="content">{{ classify }}</span>
       </div>
       <div class="item-desc">
         <span class="tip">创建时间</span
@@ -22,76 +22,138 @@
         ><span class="content">￥{{ orderDetail.total }}</span>
       </div>
     </div>
-    <div class="material-list">
-      <div class="cart-item" v-for="item in materialList" :key="item.id">
-        <div class="item-img">
-          <img :src="item.url" alt="" />
-        </div>
-        <div class="desc">
-          <div class="title">{{ item.name }}</div>
-          <div class="count">X{{ item.count }}</div>
-          <div class="bottom">
-            <div class="price">
-              ￥<span>{{ item.price }}</span
-              >.00
-            </div>
-          </div>
-        </div>
+    <orderlist :orderDetailList="materialList" />
+    <div class="bottom-btn" v-if="classify != '已取消'">
+      <div class="btn">
+        <van-button
+          hairline
+          round
+          type=""
+          color="#FF6B01"
+          class="btnsize"
+          @click.stop="cancel"
+        >
+          取消订单
+        </van-button>
+      </div>
+      <div class="btn" v-if="classify == '待付款'">
+        <van-button
+          hairline
+          round
+          type=""
+          color="#14c965"
+          class="btnsize"
+          @click.stop="goPay"
+        >
+          完成支付
+        </van-button>
       </div>
     </div>
   </div>
+  <van-popup
+    v-model:show="show"
+    closeable
+    @click-close-icon="cancelPay"
+    position="bottom"
+    :style="{ height: '30%' }"
+    class="van-popup"
+  >
+    <div class="zw">
+      <p>请支付</p>
+      <img src="../assets/指纹.png" alt="" v-if="payicon" @click="finishPay" />
+      <img src="../assets/指纹-绿.png" alt="" v-else />
+    </div>
+  </van-popup>
 </template>
 
 <script>
 import { onMounted, reactive, toRefs } from "vue";
 import sheader from "../components/header";
+import orderlist from "../components/orderlist";
 import { useRoute } from "vue-router";
-import { getOrderDetail } from "../../axios/interface/order";
+import { getOrderDetail, updateOrder } from "../../axios/interface/order";
 import { Toast } from "vant";
 
 export default {
   components: {
     sheader,
+    orderlist,
   },
   setup() {
     const route = useRoute();
     const state = reactive({
       materialList: [],
       orderDetail: {
-        orderid:'',
-        time:'',
-        address:'',
-        total:"",
+        orderid: "",
+        time: "",
+        address: "",
+        total: "",
       },
-      classify:'',
+      classify: "",
       id: route.query.id,
+      payicon: true,
+      show: false,
     });
 
     onMounted(async () => {
+      init();
+    });
+
+    const init = async () => {
       Toast.loading({
         message: "加载中...",
         forbidClick: true,
       });
       let res = await getOrderDetail({ id: state.id });
       console.log(res);
+      state.classify = res.data.status;
+      state.materialList = res.data.orderDetailList;
+      state.orderDetail = res.data.orderDetail;
+      Toast.clear();
+    };
+    //取消订单
+    const cancel = async () => {
+      let res = await updateOrder({ id: state.id, type: 0 });
+      console.log(res);
       if (res.code == "80000") {
-        state.orderDetail = res.data.orderDetail;
-        if(state.orderDetail.ispay.data[0]){
-          state.classify = '已支付'
-        }else{
-          state.classify = '未支付'
-        }
-        if(state.orderDetail.isclose.data[0]){
-          state.classify = '已取消'
-        }
-        state.materialList = res.data.orderDetailList;
-        Toast.clear();
+        Toast("已取消");
+        setTimeout(() => {
+          init();
+        }, 500);
       }
-    });
-
+    };
+    //显示支付界面
+    const goPay = () => {
+      console.log(123);
+      state.show = true;
+    };
+    //完成支付
+    const finishPay = async () => {
+      Toast.loading({
+        message: "加载中...",
+        forbidClick: true,
+      });
+      state.payicon = false;
+      let res = await updateOrder({ id: state.id, type: 1 });
+      console.log(res);
+      if (res.code == "80000") {
+        Toast.success("支付成功");
+        state.show = false;
+        setTimeout(() => {
+          init();
+        }, 500);
+      } else {
+        Toast.fail(res.message);
+      }
+    };
+    const cancelPay = () => {};
     return {
-      ...toRefs(state)
-    }
+      ...toRefs(state),
+      cancel,
+      goPay,
+      finishPay,
+      cancelPay,
+    };
   },
 };
 </script>
@@ -100,7 +162,7 @@ export default {
 @import "../assets/mixin";
 
 .main {
-  padding: 1.2rem 0.2rem;
+  padding: 1.2rem 0.2rem 2rem;
   .order-info {
     background-color: #fff;
     border-radius: 0.2rem;
@@ -123,61 +185,39 @@ export default {
     }
     .item-desc:last-child {
       margin-bottom: 0;
-      .content{
+      .content {
         color: @primary;
       }
     }
   }
-  .material-list {
-    .cart-item:first-child {
-      border-top-right-radius: 0.2rem;
-      border-top-left-radius: 0.2rem;
-    }
-    .cart-item:last-child {
-      border-bottom-right-radius: 0.2rem;
-      border-bottom-left-radius: 0.2rem;
-    }
-    .cart-item {
-      display: flex;
-      background-color: #fff;
+  .bottom-btn {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    background-color: #fff;
+    z-index: 99;
+    .btn {
+      flex: 1;
       padding: 0.2rem;
-      .item-img {
-        img {
-          .wh(2.5rem,2.5rem);
-          border-radius: 0.2rem;
-        }
-      }
-      .desc {
-        margin-left: 0.2rem;
-        display: flex;
-        width: 5.6rem;
-        justify-content: space-between;
-        flex-direction: column;
-
-        .title {
-          width: 5.4rem;
-          overflow: hidden;
-          white-space: nowrap;
-          font-size: 0.4rem;
-        }
-        .count {
-          color: #999;
-        }
-        .bottom {
-          .fj();
-          .price {
-            color: @primary;
-            span {
-              font-size: 0.5rem;
-            }
-          }
-        }
+      .btnsize {
+        width: 100%;
       }
     }
-    .delete-button {
-      margin-right: 0.01rem;
-      height: 100%;
-      width: 1.8rem;
+  }
+}
+.van-popup {
+  z-index: 999;
+  .zw {
+    text-align: center;
+    img {
+      .wh(1.8rem,1.8rem);
+      display: block;
+      margin-left: 50%;
+      margin-top: 15%;
+      transform: translate(-50%);
     }
   }
 }

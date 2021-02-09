@@ -24,8 +24,8 @@ export default {
 @import './assets/mixin.less';
 html,
 body {
-  height: 100%;
   overflow-x: hidden;
+  height: 100%;
   overflow-y: scroll;
   margin: 0;
   padding: 0;

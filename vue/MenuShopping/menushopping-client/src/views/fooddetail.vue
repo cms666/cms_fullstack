@@ -112,7 +112,7 @@ export default {
         store.dispatch("updateCart");
         Toast.success(res.message);
       } else {
-        Toast.fail(res.message);
+        Toast(res.message);
       }
     };
     //去购物车

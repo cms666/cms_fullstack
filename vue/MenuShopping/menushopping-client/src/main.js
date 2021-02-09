@@ -24,6 +24,7 @@ import {
   AddressList,
   AddressEdit,
   Popup,
+  Tab, Tabs,List,PullRefresh 
 } from "vant";
 import "vant/lib/index.css";
 const app = createApp(App);
@@ -65,6 +66,10 @@ app
   .use(AddressList)
   .use(AddressEdit)
   .use(Popup)
+  .use(Tab)
+  .use(Tabs)
+  .use(List)
+  .use(PullRefresh)
   .use(store)
   .use(router)
   .mount("#app");
