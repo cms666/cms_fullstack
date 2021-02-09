@@ -185,6 +185,31 @@ let getOrderDetailList = function(id){
   return allServices.query(_sql);
 }
 
+//根据page和status获取订单列表
+let getOrderList = function(status,token){
+  let _sql = ''
+  if(status == ''){
+    _sql = `select * from orders where userid=${token} order by id desc`;
+  }else if(status == '0'){
+    _sql = `select * from orders where userid=${token} and ispay=0 and isclose=0 order by id desc`;
+  }else if(status == '4'){
+    _sql = `select * from orders where userid=${token} and isclose=1 order by id desc`;
+  }else{
+    _sql = `select * from orders where userid=${token} and ispay=1 and isclose=0 order by id desc`;
+  }
+  return allServices.query(_sql);
+}
+
+//修改订单
+let updateOrder = function(id,type){
+  let _sql = ''
+  if(Number(type)){
+    _sql = `update orders set ispay=1 where orderid=${id}`;
+  }else{
+    _sql = `update orders set isclose=1 where orderid=${id}`;
+  }
+  return allServices.query(_sql);
+}
 module.exports = {
   userLogin,
   findUser,
@@ -212,4 +237,6 @@ module.exports = {
   createOrderList,
   getOrderDetail,
   getOrderDetailList,
+  getOrderList,
+  updateOrder,
 };
