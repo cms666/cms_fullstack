@@ -52,14 +52,9 @@ import { onMounted, reactive, toRefs, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import sheader from "../components/header";
 import cartlist from "../components/cartlist";
-import {setLocal} from '../utils/utils'
+import { setLocal, getLocal } from "../utils/utils";
 
-import {
-  detail,
-  addCart,
-  getFoodDetail,
-  addFoodCart,
-} from "../../axios/interface/material";
+import { getFoodDetail, addFoodCart } from "../../axios/interface/material";
 import { useStore } from "vuex";
 import { Toast } from "vant";
 
@@ -122,12 +117,16 @@ export default {
 
     //立即购买
     const goToBuy = () => {
-      if (!store.state.cartselected.length) {
-        Toast("请选择商品");
-        return;
+      if (getLocal("token")) {
+        if (!store.state.cartselected.length) {
+          Toast("请选择商品");
+          return;
+        }
+        setLocal("account", JSON.stringify(store.state.cartselected));
+        router.push({ path: "/account" });
+      } else {
+        router.push({ path: "/login" });
       }
-      setLocal("account", JSON.stringify(store.state.cartselected));
-      router.push({ path: "/account" });
     };
     return {
       ...toRefs(state),

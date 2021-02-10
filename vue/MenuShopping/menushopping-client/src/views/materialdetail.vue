@@ -48,7 +48,7 @@ import sheader from "../components/header";
 import { detail, addCart } from "../../axios/interface/material";
 import { useStore } from "vuex";
 import { Toast } from "vant";
-import { setLocal } from "../utils/utils";
+import { setLocal, getLocal } from "../utils/utils";
 
 export default {
   components: {
@@ -90,11 +90,15 @@ export default {
     };
     //立即购买
     const goToBuy = () => {
-      setLocal(
-        "account",
-        JSON.stringify([{ id: state.material.id, count: 1 }])
-      );
-      router.push({ path: "/account" });
+      if (getLocal("token")) {
+        setLocal(
+          "account",
+          JSON.stringify([{ id: state.material.id, count: 1 }])
+        );
+        router.push({ path: "/account" });
+      } else {
+        router.push({ path: "/login" });
+      }
     };
     return {
       ...toRefs(state),

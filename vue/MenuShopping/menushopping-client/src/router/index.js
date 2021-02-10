@@ -62,6 +62,21 @@ const routes = [
     name: "myorder",
     component: () => import("../views/myorder"),
   },
+  {
+    path: "/user",
+    name: "user",
+    component: () => import("../views/user"),
+  },
+  {
+    path: "/category",
+    name: "category",
+    component: () => import("../views/category"),
+  },
+  {
+    path: "/search",
+    name: "search",
+    component: () => import("../views/search"),
+  },
 ];
 
 const router = createRouter({

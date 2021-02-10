@@ -16,6 +16,13 @@ export const register = (data) => {
   });
 };
 
+export const getuserInfo = () => {
+  return axios({
+    url: "users/getuserInfo",
+    method: "post",
+  });
+};
+
 
 
 

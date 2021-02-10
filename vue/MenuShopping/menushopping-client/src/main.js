@@ -24,7 +24,7 @@ import {
   AddressList,
   AddressEdit,
   Popup,
-  Tab, Tabs,List,PullRefresh 
+  Tab, Tabs,List,PullRefresh,Cell,CellGroup,
 } from "vant";
 import "vant/lib/index.css";
 const app = createApp(App);
@@ -42,7 +42,13 @@ import VueVideoPlayer from "vue-video-player";
 // require videojs style
 import "video.js/dist/video-js.css";
 // import 'vue-video-player/src/custom-theme.css'
-
+app.directive('focus', {
+  // 当被绑定的元素挂载到 DOM 中时……
+  onMounted(el) {
+    // 聚焦元素
+    el.focus()
+  }
+})
 app.use(VueVideoPlayer);
 
 app
@@ -72,4 +78,6 @@ app
   .use(PullRefresh)
   .use(store)
   .use(router)
+  .use(Cell)
+  .use(CellGroup)
   .mount("#app");
