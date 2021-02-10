@@ -50,40 +50,33 @@ router.post("/addCart", async (ctx, next) => {
   let token = ctx.request.header.token;
   let id = ctx.request.body.id;
   let count = ctx.request.body.count;
-  if (token) {
-    let res = await findCartMaterial(token, id);
-    if (res.length) {
-      ctx.body = {
-        code: "80002",
-        data: res[0].id,
-        message: "已存在，请勿重复添加",
-      };
-    } else {
-      await addCart([token, id, count]).then((res) => {
-        console.log(res);
-        let r = "";
-        if (res.affectedRows != 0) {
-          r = "ok";
-          ctx.body = {
-            code: "80000",
-            data: res.insertId,
-            message: "添加成功",
-          };
-        } else {
-          r = "error";
-          ctx.body = {
-            code: "80004",
-            data: r,
-            message: "添加失败",
-          };
-        }
-      });
-    }
-  } else {
+  let res = await findCartMaterial(token, id);
+  if (res.length) {
     ctx.body = {
-      code: "80003",
-      message: "请登录",
+      code: "80002",
+      data: res[0].id,
+      message: "已存在，请勿重复添加",
     };
+  } else {
+    await addCart([token, id, count]).then((res) => {
+      console.log(res);
+      let r = "";
+      if (res.affectedRows != 0) {
+        r = "ok";
+        ctx.body = {
+          code: "80000",
+          data: res.insertId,
+          message: "添加成功",
+        };
+      } else {
+        r = "error";
+        ctx.body = {
+          code: "80004",
+          data: r,
+          message: "请登录",
+        };
+      }
+    });
   }
 });
 

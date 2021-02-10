@@ -42,9 +42,15 @@ let findUser = function (username) {
   return allServices.query(_sql);
 };
 
+// 根据id查找用户
+let getuserInfo = function (id) {
+  let _sql = `select * from users where id=${id}`;
+  return allServices.query(_sql);
+};
+
 // 注册
 let insertUser = function (value) {
-  let _sql = `insert into users set username=?,password=?`;
+  let _sql = `insert into users set username=?,password=?,avatar=?`;
   return allServices.query(_sql, value);
 };
 
@@ -213,6 +219,7 @@ let updateOrder = function(id,type){
 module.exports = {
   userLogin,
   findUser,
+  getuserInfo,
   insertUser,
   findHomeSwiper,
   findHomeFoodlist,

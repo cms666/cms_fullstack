@@ -3,6 +3,7 @@ const {
   userLogin,
   findUser,
   insertUser,
+  getuserInfo,
 } = require("../controllers/mysqlConfig");
 
 router.prefix("/users");
@@ -32,7 +33,7 @@ router.get("/login", async (ctx, next) => {
       } else {
         r = "error";
         ctx.body = {
-          code: "80004",
+          code: "80002",
           data: r,
           message: "账号或密码错误",
         };
@@ -40,7 +41,7 @@ router.get("/login", async (ctx, next) => {
     })
     .catch((err) => {
       ctx.body = {
-        code: "80002",
+        code: "80004",
         data: err,
       };
     });
@@ -54,7 +55,8 @@ router.get("/register", async (ctx, next) => {
   console.log(ctx.request.query);
   await findUser(username).then(async (res) => {
     if (!res.length) {
-      await insertUser([username, password]).then((res1) => {
+      let avatar = 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1509430250,3181105591&fm=26&gp=0.jpg'
+      await insertUser([username, password,avatar]).then((res1) => {
         let r = "";
         if (res1.affectedRows != 0) {
           r = "ok";
@@ -81,4 +83,33 @@ router.get("/register", async (ctx, next) => {
   });
 });
 
+//根据id查询用户信息
+router.post('/getuserInfo', async (ctx, next) =>{
+  let {token} = ctx.request.header
+  await getuserInfo(token)
+  .then((res) => {
+    let r = "";
+    if (res.length) {
+      r = "ok";
+      ctx.body = {
+        code: "80000",
+        data: res[0],
+        message: "查询成功",
+      };
+    } else {
+      r = "error";
+      ctx.body = {
+        code: "80002",
+        data: r,
+        message: "请登录",
+      };
+    }
+  })
+  .catch((err) => {
+    ctx.body = {
+      code: "80004",
+      data: err,
+    };
+  });
+})
 module.exports = router;
