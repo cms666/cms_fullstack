@@ -21,7 +21,7 @@
     </div>
   </div>
   <foodlist :title="'爆火菜品'" :foods="homeFoodList" />
-  <material :title="'新鲜食材'" :materials="homeMaterialList" />
+  <material :title="'新鲜食材'" :materials="homeMaterialList" class="materialpadding"/>
   <snavbar />
 </template>
 
@@ -184,5 +184,8 @@ export default {
       border-radius: 50%;
     }
   }
+}
+.materialpadding{
+  padding-bottom: 1.8rem;
 }
 </style>

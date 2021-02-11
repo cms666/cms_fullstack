@@ -55,3 +55,12 @@ export const addFoodCart = (data) =>{
   })
 }
 
+//把菜的食材加入购物车
+export const searchGoods = (data) =>{
+  return axios({
+    url: 'material/searchGoods',
+    method: 'get',
+    params:data
+  })
+}
+

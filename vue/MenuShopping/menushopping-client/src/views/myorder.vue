@@ -141,13 +141,20 @@ export default {
     top: 1rem;
     left: 0;
     z-index: 99;
+    width: 100%;
   }
   .content {
-    overflow-y: scroll;
-    padding: 0.2rem 0.2rem 0;
+    // overflow-y: scroll;
+    height: 100%;
+    padding: 0 0.2rem;
     .van-list {
       overflow-y: scroll;
       // height: 17.2rem;
+      height: 15.6rem;
+    }
+    .van-list::-webkit-scrollbar {
+      width: 0px;
+      height: 0px;
     }
     .order-item-box {
       background-color: #fff;

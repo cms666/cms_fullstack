@@ -1,9 +1,12 @@
 <template>
   <div id="app">
-    <transition :name="transitionName">
-      <router-view> </router-view>
-    </transition>
-    
+    <router-view class="router-view" v-slot="{ Component }">
+      <transition :name="transitionName">
+        <!-- <keep-alive include="search,myorder"> -->
+          <component :is="Component" />
+        <!-- </keep-alive> -->
+      </transition>
+    </router-view>
   </div>
 </template>
 <script>
@@ -21,7 +24,7 @@ export default {
 </script>
 
 <style lang="less">
-@import './assets/mixin.less';
+@import "./assets/mixin.less";
 html,
 body {
   overflow-x: hidden;
@@ -30,6 +33,11 @@ body {
   margin: 0;
   padding: 0;
   background-color: @bc;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
 }
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;

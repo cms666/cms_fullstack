@@ -80,7 +80,7 @@ export default {
 <style lang="less" scoped >
 @import "../assets/mixin";
 .material {
-  padding: 0.2rem 0.2rem 2rem;
+  padding: 0.2rem;
   background-color: @bc;
   .boxSizing();
   .material-header {

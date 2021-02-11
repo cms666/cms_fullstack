@@ -26,9 +26,7 @@ export default {
     const back = props.back
     const goBack = () =>{
       if(props.back == '-1'){
-        router.back(-1)
-      }else if(props.back == '-2'){
-        router.back(-2)
+        router.back()
       }else if(props.back){
         router.push(props.back)
       }

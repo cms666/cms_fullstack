@@ -76,12 +76,20 @@ const routes = [
     path: "/search",
     name: "search",
     component: () => import("../views/search"),
+    // meta: { title: '搜索', keepAlive: true }
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  scrollBehavior(to,from,savePosition){
+    if(savePosition){
+      return savePosition
+    }else{
+      return {x:0,y:0}
+    }
+  },
 });
 
 export default router;
