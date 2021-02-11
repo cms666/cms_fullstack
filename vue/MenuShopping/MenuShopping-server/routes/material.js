@@ -8,6 +8,7 @@ const {
   deleteCart,
   getFoodDetail,
   getFoodMaterial,
+  searchGoods,
 } = require("../controllers/mysqlConfig");
 
 router.prefix("/material");
@@ -262,5 +263,41 @@ router.post("/addFoodCart", async (ctx, next) => {
       message: "请登录",
     };
   }
+});
+
+router.get("/searchGoods", async (ctx, next) => {
+  let { type, pageNum,searchText} = ctx.request.query;
+  let mhText = ''
+  for(let i = 0; i < searchText.length; i++){
+    mhText += '%'+ searchText[i]
+  }
+  mhText += '%'
+  pageNum = Number(pageNum);
+  await searchGoods(type,mhText).then((res) => {
+    let obj = {}
+    let arr = [];
+    if (res.length) {
+      obj.pageNum = Math.floor(res.length / 10)
+      let tail = pageNum * 10 + 10 < res.length ? (pageNum * 10 + 10 ): res.length;
+      arr = res.slice(pageNum * 10, tail);
+      obj.list = arr
+      ctx.body = {
+        code:'80000',
+        data:obj,
+        message:'ok'
+      }
+    }else{
+      ctx.body = {
+        code:'80002',
+        data:obj,
+        message:'没有搜索的你想要的'
+      }
+    }
+  }).catch(err =>{
+    ctx.body = {
+      code:'80004',
+      message:err
+    }
+  })
 });
 module.exports = router;

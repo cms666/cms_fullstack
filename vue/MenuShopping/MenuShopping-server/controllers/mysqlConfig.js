@@ -216,6 +216,24 @@ let updateOrder = function(id,type){
   }
   return allServices.query(_sql);
 }
+
+//搜索
+let searchGoods = function(type,mhText){
+  let _sql = ''
+  if(mhText == '%'){
+    if(Number(type) == 1){
+      _sql = `select * from foods`;
+    }else{
+      _sql = `select * from material`;
+    }
+  }else if(Number(type) == 1){
+    _sql = `select * from foods where name like '${mhText}'`;
+  }else{
+    _sql = `select * from material where name like '${mhText}'`;
+  }
+  return allServices.query(_sql);
+}
+// where name like ${mhText}
 module.exports = {
   userLogin,
   findUser,
@@ -246,4 +264,5 @@ module.exports = {
   getOrderDetailList,
   getOrderList,
   updateOrder,
+  searchGoods,
 };
