@@ -78,6 +78,12 @@ const routes = [
     component: () => import("../views/search"),
     // meta: { title: '搜索', keepAlive: true }
   },
+  {
+    path: "/tab",
+    name: "tab",
+    component: () => import("../views/tab"),
+    // meta: { title: '搜索', keepAlive: true }
+  },
 ];
 
 const router = createRouter({

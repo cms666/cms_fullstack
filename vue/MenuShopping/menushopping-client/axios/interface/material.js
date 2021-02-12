@@ -64,3 +64,20 @@ export const searchGoods = (data) =>{
   })
 }
 
+//获取分类数据
+export const getCategoryData = () =>{
+  return axios({
+    url: 'material/getCategoryData',
+    method: 'get',
+  })
+}
+
+//获取分类Tab数据
+export const getTabFoodData = (data) =>{
+  return axios({
+    url: 'material/getTabFoodData',
+    method: 'get',
+    params:data
+  })
+}
+

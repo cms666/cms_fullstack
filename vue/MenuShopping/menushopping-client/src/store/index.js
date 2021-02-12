@@ -17,7 +17,7 @@ export default createStore({
     async updateCart(ctx) {
       const res = await getCart();
       if (res.code == "80000") {
-        console.log(res.data);
+        // console.log(res.data);
         ctx.commit("addCart", {
           count: res.data.length || 0,
         });

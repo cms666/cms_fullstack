@@ -3,18 +3,28 @@
     <router-view class="router-view" v-slot="{ Component }">
       <transition :name="transitionName">
         <!-- <keep-alive include="search,myorder"> -->
-          <component :is="Component" />
+        <component :is="Component" />
         <!-- </keep-alive> -->
       </transition>
     </router-view>
   </div>
 </template>
 <script>
-import { reactive, toRefs } from "vue";
+import { onMounted, reactive, toRefs } from "vue";
+import { useStore } from "vuex";
+import { getLocal } from "./utils/utils";
+
 export default {
   setup() {
+    const store = useStore();
     const state = reactive({
       transitionName: "slide-left",
+    });
+    onMounted(() => {
+      const token = getLocal("token");
+      if (token) {
+        store.dispatch("updateCart");
+      }
     });
     return {
       ...toRefs(state),
@@ -38,6 +48,9 @@ html::-webkit-scrollbar,
 body::-webkit-scrollbar {
   width: 0px;
   height: 0px;
+}
+ul li {
+  list-style: none;
 }
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;

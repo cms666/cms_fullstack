@@ -28,6 +28,7 @@
           :immediate-check="check"
           finished-text="没有更多了"
           class="van-list"
+          id="position"
         >
           <div
             class="order-item-box"
@@ -48,11 +49,13 @@
 </template>
 
 <script>
-import { onMounted, reactive, toRefs } from "vue";
+import { onMounted, reactive, toRefs, nextTick } from "vue";
 import sheader from "../components/header";
 import orderlist from "../components/orderlist";
 import { getOrderList } from "../../axios/interface/order";
-import { useRouter } from "vue-router";
+import { useRouter, onBeforeRouteLeave } from "vue-router";
+import { setLocal, getLocal } from "../utils/utils";
+import { Toast } from "vant";
 
 export default {
   components: {
@@ -70,8 +73,44 @@ export default {
       page: 0,
       totalpage: 0,
       check: false,
+      scrollTop: 0,
     });
-
+    //进入详情页面缓存
+    onBeforeRouteLeave((to, from, next) => {
+      console.log("离开");
+      if (to.name == "user") {
+        if (getLocal("keepalive")) {
+          localStorage.removeItem("keepalive");
+        }
+        next();
+      }
+      if (to.name == "orderdetail") {
+        setLocal("keepalive", JSON.stringify(state));
+        next();
+      }
+    });
+    onMounted(() => {
+      window.addEventListener("scroll", scrollTop, true);
+      if (getLocal("keepalive")) {
+        for (let key in state) {
+          state[key] = JSON.parse(getLocal("keepalive"))[key];
+        }
+      } else {
+        onRefresh();
+      }
+    });
+    const scrollTop = (e) => {
+      state.scrollTop = e.target.scrollTop;
+      // let top = document.getElementById("position");
+      // console.log(top.scrollTop);
+    };
+    //自动聚焦和滚动事件
+    nextTick(() => {
+      if (state.scrollTop) {
+        let top = document.getElementById("position");
+        top.scrollTop = state.scrollTop;
+      }
+    });
     const onLoad = async () => {
       if (!state.refreshing && state.page < state.totalpage) {
         state.page += 1;
@@ -84,6 +123,7 @@ export default {
         pagenumber: state.page,
         status: state.status,
       });
+      Toast.clear();
       console.log(data);
       let { pageNum, orderlist } = data;
 
@@ -98,6 +138,10 @@ export default {
     };
 
     const onRefresh = () => {
+      Toast.loading({
+        message: "加载中...",
+        forbidClick: true,
+      });
       // 清空列表数据
       state.finished = false;
       // 重新加载数据
@@ -112,9 +156,6 @@ export default {
       state.status = name;
       onRefresh();
     };
-    onMounted(() => {
-      onRefresh();
-    });
 
     //去订单详情
     const goToDetail = (id) => {
@@ -150,7 +191,7 @@ export default {
     .van-list {
       overflow-y: scroll;
       // height: 17.2rem;
-      height: 15.6rem;
+      height: 15.5rem;
     }
     .van-list::-webkit-scrollbar {
       width: 0px;

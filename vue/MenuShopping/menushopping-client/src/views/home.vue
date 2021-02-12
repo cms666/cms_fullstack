@@ -14,7 +14,7 @@
   <!-- 分类列表 -->
   <div class="classify">
     <div class="category-list">
-      <div v-for="item in categoryList" :key="item.name">
+      <div v-for="item in categoryList" :key="item.name" @click="goToTab(item.name)">
         <img :src="item.url" alt="" />
         <span>{{ item.name }}</span>
       </div>
@@ -107,7 +107,6 @@ export default {
       const token = getLocal("token");
       if (token) {
         state.isLogin = true;
-        store.dispatch("updateCart");
       }
       const { data } = await home();
       Toast.clear();
@@ -116,9 +115,13 @@ export default {
         (state.homeFoodList = data.homeFoodList);
       state.homeMaterialList = data.homeMaterialList;
     });
+    const goToTab =(name) =>{
+      router.push({path:'/tab',query:{name:name}})
+    }
     return {
       ...toRefs(state),
       tosearch,
+      goToTab,
     };
   },
 };

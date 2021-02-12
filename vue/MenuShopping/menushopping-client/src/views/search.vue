@@ -36,7 +36,6 @@
         v-model="refreshing"
         @refresh="onRefresh"
         class="order-list-refresh"
-         ref="position"
       >
         <van-list
           v-model:loading="loading"
@@ -46,9 +45,12 @@
           :immediate-check="false"
           finished-text="没有更多了"
           class="van-list"
+          id="position"
         >
-          <foodlist :foods="searchResult" v-if="itemId == 1" />
-          <material :materials="searchResult" v-else />
+          <div ref="position">
+            <foodlist :foods="searchResult" v-if="itemId == 1" />
+            <material :materials="searchResult" v-else />
+          </div>
         </van-list>
       </van-pull-refresh>
     </div>
@@ -108,26 +110,35 @@ export default {
         next();
       }
       if (to.name == "materialdetail" || to.name == "fooddetail") {
-        console.log(position);
-        state.scrollTop = document.body.scrollTop;
+        // console.log(position);
+        // state.scrollTop = document.body.scrollTop;
         setLocal("keepalive", JSON.stringify(state));
         next();
       }
     });
     onMounted(() => {
+      window.addEventListener("scroll", scrollTop, true);
       if (getLocal("keepalive")) {
         for (let key in state) {
           state[key] = JSON.parse(getLocal("keepalive"))[key];
         }
       }
     });
+    const scrollTop = (e) => {
+      state.scrollTop = e.target.scrollTop;
+    };
     //自动聚焦和滚动事件
     nextTick(() => {
       focus._value.focus();
       console.log(state.scrollTop);
-      if (getLocal("keepalive")) {
-        document.body.scrollTop = state.scrollTop;
+      // console.log(position);
+      // setTimeout(() => {
+      if (state.scrollTop) {
+        let top = document.getElementById("position");
+        top.scrollTop = state.scrollTop;
       }
+      // console.log(position);
+      // }, 2000);
     });
     const goback = () => {
       router.back(-1);
@@ -190,7 +201,7 @@ export default {
     watch(
       () => state.searchText,
       (newval, oldval) => {
-        console.log(newval);
+        // console.log(newval);
         state.showcloseicon = newval ? true : false;
       }
     );
@@ -288,7 +299,7 @@ export default {
     .van-list {
       overflow-y: scroll;
       // height: 17.2rem;
-      height: 15.6rem;
+      height: 15.9rem;
     }
     .van-list::-webkit-scrollbar {
       width: 0px;
