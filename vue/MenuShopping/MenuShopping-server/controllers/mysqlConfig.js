@@ -234,6 +234,18 @@ let searchGoods = function(type,mhText){
   return allServices.query(_sql);
 }
 // where name like ${mhText}
+
+//分类-菜品
+let getCategoryFoodData = function(type){
+  let _sql = `select * from foods where classify='${type}'`;
+  return allServices.query(_sql);
+}
+
+//分类-食材
+let getCategoryMaterialData = function(){
+  let _sql = `select * from material group by classify`;
+  return allServices.query(_sql);
+}
 module.exports = {
   userLogin,
   findUser,
@@ -265,4 +277,6 @@ module.exports = {
   getOrderList,
   updateOrder,
   searchGoods,
+  getCategoryFoodData,
+  getCategoryMaterialData,
 };

@@ -14,10 +14,18 @@ router.get("/", async (ctx, next) => {
 router.get("/home", async (ctx, next) => {
   let data = {};
   let r = "";
-  data.homeSwiper = await findHomeSwiper();
-  data.homeFoodList = await findHomeFoodlist();
-  data.homeMaterialList = await findHomeMaterialList();
-  if (data.HomeSwiper || data.homeFoodList || data.HomeMaterialList) {
+  let res = await findHomeSwiper();
+  data.homeSwiper = res;
+  let res1 = await findHomeFoodlist();
+  data.homeFoodList = res1.slice(0, 5);
+  let res2 = await findHomeMaterialList();
+  data.homeMaterialList = res2.slice(0, 5);
+  console.log(data);
+  if (
+    res.length &&
+    res1.length &&
+    res2.length
+  ) {
     r = "ok";
     ctx.body = {
       code: "80000",

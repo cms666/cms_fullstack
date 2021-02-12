@@ -9,6 +9,9 @@ const {
   getFoodDetail,
   getFoodMaterial,
   searchGoods,
+  findHomeFoodlist,
+  findHomeMaterialList,
+  getCategoryFoodData,
 } = require("../controllers/mysqlConfig");
 
 router.prefix("/material");
@@ -265,39 +268,131 @@ router.post("/addFoodCart", async (ctx, next) => {
   }
 });
 
+//搜索
 router.get("/searchGoods", async (ctx, next) => {
-  let { type, pageNum,searchText} = ctx.request.query;
-  let mhText = ''
-  for(let i = 0; i < searchText.length; i++){
-    mhText += '%'+ searchText[i]
+  let { type, pageNum, searchText } = ctx.request.query;
+  let mhText = "";
+  for (let i = 0; i < searchText.length; i++) {
+    mhText += "%" + searchText[i];
   }
-  mhText += '%'
+  mhText += "%";
   pageNum = Number(pageNum);
-  await searchGoods(type,mhText).then((res) => {
-    let obj = {}
-    let arr = [];
-    if (res.length) {
-      obj.pageNum = Math.floor(res.length / 10)
-      let tail = pageNum * 10 + 10 < res.length ? (pageNum * 10 + 10 ): res.length;
-      arr = res.slice(pageNum * 10, tail);
-      obj.list = arr
+  await searchGoods(type, mhText)
+    .then((res) => {
+      let obj = {};
+      let arr = [];
+      if (res.length) {
+        obj.pageNum = Math.floor(res.length / 10);
+        let tail =
+          pageNum * 10 + 10 < res.length ? pageNum * 10 + 10 : res.length;
+        arr = res.slice(pageNum * 10, tail);
+        obj.list = arr;
+        ctx.body = {
+          code: "80000",
+          data: obj,
+          message: "ok",
+        };
+      } else {
+        ctx.body = {
+          code: "80002",
+          data: obj,
+          message: "没有搜索的你想要的",
+        };
+      }
+    })
+    .catch((err) => {
+      ctx.body = {
+        code: "80004",
+        message: err,
+      };
+    });
+});
+
+//分类数据
+router.get("/getCategoryData", async (ctx, next) => {
+  let res1 = await findHomeFoodlist();
+  let res2 = await findHomeMaterialList();
+  let result = [];
+  if (res1.length && res2.length) {
+    let map = new Map();
+    res1.forEach((item) => {
+      let cur = map.get(item.classify);
+      if (cur) {
+        cur.push(item);
+        map.set(item.classify, cur);
+      } else {
+        let arr = [];
+        arr.push(item);
+        map.set(item.classify, arr);
+      }
+    });
+    let count = 0;
+    for (let key of map.keys()) {
+      let obj = {};
+      obj.name = key;
+      obj.id = count++;
+      obj.type = 0
+      obj.categoryData = map.get(key);
+      result.push(obj);
+    }
+    console.log(result);
+    map.clear();
+
+    res2.forEach((item) => {
+      let cur = map.get(item.classify);
+      if (cur) {
+        cur.push(item);
+        map.set(item.classify, cur);
+      } else {
+        let arr = [];
+        arr.push(item);
+        map.set(item.classify, arr);
+      }
+    });
+    for (let key of map.keys()) {
+      let obj = {};
+      obj.name = key;
+      obj.id = count++;
+      obj.type = 1
+      obj.categoryData = map.get(key);
+      result.push(obj);
+    }
+    ctx.body = {
+      code: "80000",
+      data: result,
+      message: "分类列表",
+    };
+  } else {
+    ctx.body = {
+      code: "80002",
+      data: result,
+      message: "数据库不会为空",
+    };
+  }
+});
+
+//切换tab数据
+router.get('/getTabFoodData', async (ctx, next) =>{
+  let {type} = ctx.request.query
+  await getCategoryFoodData(type).then(res =>{
+    if(res.length){
       ctx.body = {
         code:'80000',
-        data:obj,
-        message:'ok'
+        data:res,
+        message:'各类美食'
       }
     }else{
       ctx.body = {
-        code:'80002',
-        data:obj,
-        message:'没有搜索的你想要的'
+        code: '80002',
+        data:[],
+        message:'该分类没有美食哦~'
       }
     }
   }).catch(err =>{
-    ctx.body = {
+    ctx.body ={
       code:'80004',
       message:err
     }
   })
-});
+})
 module.exports = router;
