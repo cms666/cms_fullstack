@@ -2,6 +2,7 @@ import react, { Component, Fragment } from "react";
 import "../style/eat.css";
 import PropTypes from 'prop-types'
 import EatItem from "./eatItem";
+import axios from 'axios'
 class Eat extends Component {
   constructor(props) {
     super(props);
@@ -10,12 +11,16 @@ class Eat extends Component {
       list: ["宫保鸡丁", "肥肠"],
     };
   }
-
+  componentDidMount(){
+    axios.get('https://view.inews.qq.com/g2/getOnsInfo?name=disease_h5').then(res => {
+      console.log(res);
+    })
+  }
   inputChange(e) {
     // console.log(e.target.value);
     // this.state.inputValue = e.target.value
     this.setState({
-      inputValue: e.target.value,
+      inputValue: this.input.value,
     });
   }
   addList() {
@@ -40,6 +45,7 @@ class Eat extends Component {
             className="input"
             value={this.state.inputValue}
             onChange={this.inputChange.bind(this)}
+            ref={(input) => {this.input=input}}
           ></input>
           <button onClick={this.addList.bind(this)}>下单</button>
         </div>
