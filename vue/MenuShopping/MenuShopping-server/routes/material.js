@@ -12,6 +12,9 @@ const {
   findHomeFoodlist,
   findHomeMaterialList,
   getCategoryFoodData,
+  findSearchText,
+  insertSearchText,
+  relevance,
 } = require("../controllers/mysqlConfig");
 
 router.prefix("/material");
@@ -278,10 +281,17 @@ router.get("/searchGoods", async (ctx, next) => {
   mhText += "%";
   pageNum = Number(pageNum);
   await searchGoods(type, mhText)
-    .then((res) => {
+    .then(async (res) => {
       let obj = {};
       let arr = [];
       if (res.length) {
+        if (searchText) {
+          let res2 = await findSearchText(searchText);
+          if (!res2.length) {
+            await insertSearchText(searchText);
+          }
+        }
+
         obj.pageNum = Math.floor(res.length / 10);
         let tail =
           pageNum * 10 + 10 < res.length ? pageNum * 10 + 10 : res.length;
@@ -331,7 +341,7 @@ router.get("/getCategoryData", async (ctx, next) => {
       let obj = {};
       obj.name = key;
       obj.id = count++;
-      obj.type = 0
+      obj.type = 0;
       obj.categoryData = map.get(key);
       result.push(obj);
     }
@@ -353,7 +363,7 @@ router.get("/getCategoryData", async (ctx, next) => {
       let obj = {};
       obj.name = key;
       obj.id = count++;
-      obj.type = 1
+      obj.type = 1;
       obj.categoryData = map.get(key);
       result.push(obj);
     }
@@ -372,24 +382,48 @@ router.get("/getCategoryData", async (ctx, next) => {
 });
 
 //切换tab数据
-router.get('/getTabFoodData', async (ctx, next) =>{
-  let {type} = ctx.request.query
-  await getCategoryFoodData(type).then(res =>{
-    if(res.length){
+router.get("/getTabFoodData", async (ctx, next) => {
+  let { type } = ctx.request.query;
+  await getCategoryFoodData(type)
+    .then((res) => {
+      if (res.length) {
+        ctx.body = {
+          code: "80000",
+          data: res,
+          message: "各类美食",
+        };
+      } else {
+        ctx.body = {
+          code: "80002",
+          data: [],
+          message: "该分类没有美食哦~",
+        };
+      }
+    })
+    .catch((err) => {
+      ctx.body = {
+        code: "80004",
+        message: err,
+      };
+    });
+});
+
+//搜索关联
+router.get('/relevance', async(ctx, next)=>{
+  let { searchText } = ctx.request.query;
+  let mhText = "";
+  for (let i = 0; i < searchText.length; i++) {
+    mhText += "%" + searchText[i];
+  }
+  mhText += "%";
+  await relevance(mhText).then(res =>{
       ctx.body = {
         code:'80000',
-        data:res,
-        message:'各类美食'
+        data:res.length ? res : [],
+        message:'别人搜了欸'
       }
-    }else{
-      ctx.body = {
-        code: '80002',
-        data:[],
-        message:'该分类没有美食哦~'
-      }
-    }
   }).catch(err =>{
-    ctx.body ={
+    ctx.body = {
       code:'80004',
       message:err
     }

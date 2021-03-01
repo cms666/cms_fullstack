@@ -103,11 +103,12 @@ export default {
 <style lang="less" scoped >
 @import "../assets/mixin";
 .main {
-  margin-top: 1.8rem;
+  margin-top: 2rem;
   .tabs {
     position: fixed;
     top: 1rem;
     left: 0;
+    width: 100%;
   }
 }
 </style>

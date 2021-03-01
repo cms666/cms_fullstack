@@ -81,3 +81,11 @@ export const getTabFoodData = (data) =>{
   })
 }
 
+//获取搜索关联
+export const relevance = (data) =>{
+  return axios({
+    url: 'material/relevance',
+    method: 'get',
+    params:data
+  })
+}

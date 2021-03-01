@@ -246,6 +246,24 @@ let getCategoryMaterialData = function(){
   let _sql = `select * from material group by classify`;
   return allServices.query(_sql);
 }
+
+//查找搜索内容
+let findSearchText = function(text){
+  let _sql = `select * from search where value='${text}'`;
+  return allServices.query(_sql);
+}
+
+//插入搜索内容
+let insertSearchText = function(text){
+  let _sql = `insert into search set value='${text}'`;
+  return allServices.query(_sql);
+}
+
+//查找关联搜索内容
+let relevance = function(text){
+  _sql = `select * from search where value like '${text}'`;
+  return allServices.query(_sql);
+}
 module.exports = {
   userLogin,
   findUser,
@@ -279,4 +297,7 @@ module.exports = {
   searchGoods,
   getCategoryFoodData,
   getCategoryMaterialData,
+  findSearchText,
+  insertSearchText,
+  relevance,
 };

@@ -10,6 +10,7 @@
           v-model="searchText"
           ref="focus"
           @keyup.enter="onRefresh"
+          @focus="showfocus"
         />
         <van-icon
           name="close"
@@ -20,6 +21,17 @@
       </div>
       <div class="tip" @click="onRefresh">搜索</div>
     </header>
+    <div class="search-list" v-if="showRelevance">
+      <div
+        class="item"
+        v-for="(item, index) in searchList"
+        :key="item.id"
+        @click="goRelevance(item.value)"
+      >
+        <i class="iconfont icon--search"></i>
+        <span>{{ item.value }}</span>
+      </div>
+    </div>
     <div class="tab">
       <div
         class="item"
@@ -70,7 +82,7 @@ import {
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import foodlist from "../components/foodlist";
 import material from "../components/materiallist";
-import { searchGoods } from "../../axios/interface/material";
+import { searchGoods, relevance } from "../../axios/interface/material";
 import { Toast } from "vant";
 import { setLocal, getLocal } from "../utils/utils";
 export default {
@@ -98,6 +110,10 @@ export default {
       finished: false,
       refreshing: false,
       totalpage: 0,
+      searchList: [],
+      timer: null,
+      showRelevance: false,
+      onFocus: true,
     });
 
     //进入详情页面缓存
@@ -112,6 +128,7 @@ export default {
       if (to.name == "materialdetail" || to.name == "fooddetail") {
         // console.log(position);
         // state.scrollTop = document.body.scrollTop;
+        state.onFocus = false;
         setLocal("keepalive", JSON.stringify(state));
         next();
       }
@@ -129,7 +146,9 @@ export default {
     };
     //自动聚焦和滚动事件
     nextTick(() => {
-      focus._value.focus();
+      if (state.onFocus) {
+        focus._value.focus();
+      }
       console.log(state.scrollTop);
       // console.log(position);
       // setTimeout(() => {
@@ -197,17 +216,54 @@ export default {
       }
     };
 
+    //获取焦点
+    const showfocus = (e) => {
+      // console.log(e);
+      state.onFocus = true;
+      if (state.searchText) {
+        searchRelevanceLimit();
+      }
+    };
+    //点击搜索关联
+    const goRelevance = (value) => {
+      state.searchText = value;
+      state.onFocus = false;
+      state.showRelevance = false;
+      onRefresh();
+    };
+    //搜索关联防抖
+    const searchRelevanceLimit = () => {
+      if (state.timer) {
+        clearTimeout(state.timer);
+      }
+      state.timer = setTimeout(() => {
+        searchRelevance();
+      }, 500);
+    };
+
+    //搜索关联
+    const searchRelevance = async () => {
+      if (state.searchText) {
+        let { data } = await relevance({ searchText: state.searchText });
+        state.searchList = data;
+      }
+      state.showRelevance = state.searchList.length > 0 && state.onFocus && state.searchText;
+      // console.log(state.showRelevance);
+    };
     //清除按钮显示与否
     watch(
       () => state.searchText,
       (newval, oldval) => {
         // console.log(newval);
         state.showcloseicon = newval ? true : false;
+        // if (!newval || !state.onFocus) return;
+        searchRelevanceLimit();
       }
     );
 
     const clearText = () => {
       state.searchText = "";
+      focus._value.focus();
     };
     return {
       ...toRefs(state),
@@ -220,6 +276,8 @@ export default {
       position,
       onRefresh,
       onLoad,
+      goRelevance,
+      showfocus,
     };
   },
 };
@@ -228,6 +286,7 @@ export default {
 <style lang="less" scoped >
 @import "../assets/mixin";
 .main {
+  width: 100%;
   .search-header {
     .fj();
     background-color: @primary;
@@ -237,7 +296,7 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 999;
+    z-index: 99;
     .search {
       background-color: #f7f7f7;
       padding: 0.15rem 0.4rem;
@@ -262,16 +321,39 @@ export default {
       }
     }
   }
+  .search-list {
+    position: fixed;
+    top: 1.1rem;
+    left: 0;
+    z-index: 999;
+    background-color: #fff;
+    width: 100%;
+    padding: 0.2rem 0.4rem;
+    box-sizing: border-box;
+    color: #999;
+    .item {
+      border-bottom: 0.01rem solid @bc;
+      position: relative;
+      padding: 0.2rem 0;
+      .iconfont {
+        display: inline-block;
+        position: absolute;
+      }
+      span {
+        margin-left: 1rem;
+      }
+    }
+  }
   .tab {
     position: fixed;
-    top: 1rem;
+    top: 1.1rem;
     left: 0;
     display: flex;
     align-items: center;
     padding: 0.2rem 0.4rem;
     background-color: #fff;
     width: 100%;
-    z-index: 999;
+    z-index: 99;
     box-sizing: border-box;
     box-shadow: 0 0.03rem 0.03rem rgb(243, 241, 241);
     .item {
@@ -295,7 +377,7 @@ export default {
     }
   }
   .content {
-    margin-top: 1.8rem;
+    margin-top: 2rem;
     .van-list {
       overflow-y: scroll;
       // height: 17.2rem;
