@@ -25,6 +25,10 @@ Page({
     finish2: true
   },
   cancel() {
+    Toast.loading({
+      message: '加载中...',
+      forbidClick: true,
+    });
     let that = this
     wx.cloud.callFunction({
       name: 'updateOrder',
@@ -33,11 +37,13 @@ Page({
         id: that.data.id
       }
     }).then(res => {
-      Toast.success('已取消')
+      Toast('已取消')
+      setTimeout(() => {
+        wx.switchTab({
+          url: '../order/order',
+        })
+      }, 500);
 
-      wx.switchTab({
-        url: '../order/order',
-      })
     })
   },
   update() {
@@ -50,6 +56,10 @@ Page({
   },
   receive() {
     // console.log(1);
+    Toast.loading({
+      message: '加载中...',
+      forbidClick: true,
+    });
     let that = this
     wx.cloud.callFunction({
       name: 'orderTaking',
@@ -59,14 +69,20 @@ Page({
       },
       success(res) {
         Toast.success('接单成功')
-        wx.switchTab({
-          url: '../orderTaker/orderTaker'
-        })
+        setTimeout(() => {
+          wx.switchTab({
+            url: '../orderTaker/orderTaker'
+          })
+        }, 500);
+
       },
     })
   },
   finish() {
-    Toast.success('完成')
+    Toast.loading({
+      message: '加载中...',
+      forbidClick: true,
+    });
     let that = this
     wx.cloud.callFunction({
       name: 'updateOrder',
@@ -75,14 +91,20 @@ Page({
         id: that.data.id
       }
     }).then(res => {
-      wx.hideToast()
-      wx.switchTab({
-        url: '../order/order',
-      })
+      Toast.success('完成')
+      setTimeout(() => {
+        wx.switchTab({
+          url: '../order/order',
+        })
+      }, 500);
+
     })
   },
   finish2() {
-    Toast.success('完成')
+    Toast.loading({
+      message: '加载中...',
+      forbidClick: true,
+    });
     let that = this
     wx.cloud.callFunction({
       name: 'updateOrder',
@@ -91,10 +113,13 @@ Page({
         id: that.data.id
       }
     }).then(res => {
-      wx.hideToast()
-      wx.switchTab({
-        url: '../orderTaker/orderTaker',
-      })
+      Toast.success('确认完成')
+      setTimeout(() => {
+        wx.switchTab({
+          url: '../orderTaker/orderTaker',
+        })
+      }, 500);
+
     })
   },
   /**

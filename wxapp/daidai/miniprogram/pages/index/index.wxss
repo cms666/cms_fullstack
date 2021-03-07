@@ -18,8 +18,9 @@ page{
 .container .item{
   margin: 10rpx auto;
   height: 300rpx;
-  width: 40%;
-  padding: 0 20rpx;
+  width: 50%;
+  box-sizing: border-box;
+  padding: 20rpx;
   border-radius: 20rpx;
   display: flex;
   align-items: center;

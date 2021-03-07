@@ -45,6 +45,10 @@ Page({
     })
   },
   update() {
+    Toast.loading({
+      message: '加载中...',
+      forbidClick: true,
+    });
     let that = this
     wx.cloud.callFunction({
       name: 'updateOrder',
@@ -59,9 +63,12 @@ Page({
       },
       success(res) {
         Toast.success('修改成功')
-        wx.switchTab({
+        setTimeout(() => {
+          wx.switchTab({
             url: '../order/order'
           })
+        }, 500);
+
       },
       fail(err) {
         // console.log(err);
@@ -69,6 +76,10 @@ Page({
     })
   },
   publish() {
+    Toast.loading({
+      message: '加载中...',
+      forbidClick: true,
+    });
     let that = this
     wx.cloud.callFunction({
       name: 'createOrderDD',
@@ -82,9 +93,12 @@ Page({
       },
       success(res) {
         Toast.success('发布成功')
-        wx.switchTab({
-          url: '../order/order'
-        })
+        setTimeout(() => {
+          wx.switchTab({
+            url: '../order/order'
+          })
+        }, 500);
+
       },
       fail(err) {
         // console.log(err);
