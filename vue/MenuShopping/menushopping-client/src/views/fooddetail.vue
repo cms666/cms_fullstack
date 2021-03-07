@@ -193,4 +193,7 @@ export default {
   text-align: center;
   font-weight: 500;
 }
+.van-action-bar{
+  height: 1.3rem;
+}
 </style>

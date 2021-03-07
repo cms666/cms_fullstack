@@ -1,6 +1,6 @@
 <template>
+  <sheader :name="type == 'add' ? '新增地址' : '编辑地址'" :back="'-1'" />
   <div class="address-edit-box">
-    <sheader :name="type == 'add' ? '新增地址' : '编辑地址'" :back="'-1'" />
     <van-address-edit
       :area-list="areaList"
       show-postal
@@ -21,7 +21,11 @@ import { onMounted, reactive, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import sheader from "../components/header";
 import { tdist } from "../utils/utils";
-import { addAddress, getAddress,editAddress} from "../../axios/interface/address";
+import {
+  addAddress,
+  getAddress,
+  editAddress,
+} from "../../axios/interface/address";
 import { Toast } from "vant";
 
 export default {
@@ -40,7 +44,7 @@ export default {
         county_list: {},
       },
       addressInfo: {},
-      addressid:'',
+      addressid: "",
     });
     onMounted(async () => {
       // 省市区列表构建
@@ -61,7 +65,7 @@ export default {
       state.areaList.county_list = _county_list;
       if (state.type == "edit") {
         let { data } = await getAddress({ id: route.query.addressid });
-        state.addressid = data.id
+        state.addressid = data.id;
         console.log(data);
         const toCode = (area, code) => {
           for (let key in tdist)
@@ -79,7 +83,7 @@ export default {
           city: data.city,
           county: data.county,
           addressDetail: data.addressDetail,
-          postalCode:data.postalCode,
+          postalCode: data.postalCode,
           areaCode: regionCode,
           isDefault: !!data.isDefault.data[0],
         };
@@ -100,16 +104,15 @@ export default {
           Toast.fail(res.message);
         }
       } else {
-        let data = {}
-        data = e
-        data.id = state.addressid
+        let data = {};
+        data = e;
+        data.id = state.addressid;
         let res = await editAddress(data);
         if (res.code == "80000") {
           Toast.success(res.message);
           setTimeout(() => {
             router.push({ path: "/address", query: { from: state.from } });
           }, 500);
-          
         } else {
           Toast.fail(res.message);
         }

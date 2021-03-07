@@ -40,6 +40,7 @@ export default {
 <style lang="less" scoped>
 @import '../assets/mixin';
 .simple-header {
+  width: 100%;
   position: fixed;
   top: 0;
   left: 0;
@@ -55,6 +56,7 @@ export default {
   background-color: @primary;
   border-bottom: 1px solid #dcdcdc;
   font-size: 0.3rem;
+  overflow: hidden;
   .van-icon {
     line-height: 1rem;
   }

@@ -29,27 +29,27 @@ import {
 import "vant/lib/index.css";
 const app = createApp(App);
 //全局过滤器
-app.config.globalProperties.$filters = {
-  prefix(url) {
-    if (url !== undefined) {
-      let _u = url.substring(8);
-      return "https://images.weserv.nl/?url=" + _u;
-    }
-  },
-};
-import VueVideoPlayer from "vue-video-player";
+// app.config.globalProperties.$filters = {
+//   prefix(url) {
+//     if (url !== undefined) {
+//       let _u = url.substring(8);
+//       return "https://images.weserv.nl/?url=" + _u;
+//     }
+//   },
+// };
+// import VueVideoPlayer from "vue-video-player";
 
-// require videojs style
-import "video.js/dist/video-js.css";
-// import 'vue-video-player/src/custom-theme.css'
-app.directive('focus', {
-  // 当被绑定的元素挂载到 DOM 中时……
-  onMounted(el) {
-    // 聚焦元素
-    el.focus()
-  }
-})
-app.use(VueVideoPlayer);
+// // require videojs style
+// import "video.js/dist/video-js.css";
+// // import 'vue-video-player/src/custom-theme.css'
+// app.directive('focus', {
+//   // 当被绑定的元素挂载到 DOM 中时……
+//   onMounted(el) {
+//     // 聚焦元素
+//     el.focus()
+//   }
+// })
+// app.use(VueVideoPlayer);
 
 app
   .use(Icon)

@@ -1,5 +1,5 @@
 <template>
-  <sheader :name="'管理地址'" :back="from == '/account' ? '/cart' : '/user'" />
+  <sheader :name="'管理地址'" :back="from == '/account' ? '/account' : '/user'" />
   <div class="main">
     <van-swipe-cell v-for="item in allAddress" :key="item.id">
       <div class="address" @click="selectAddress(item.id)">

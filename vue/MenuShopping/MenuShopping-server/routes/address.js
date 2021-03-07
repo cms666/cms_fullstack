@@ -45,7 +45,7 @@ router.get("/account", async (ctx, next) => {
 //查询指定地址
 router.get("/getAddress", async (ctx, next) => {
   let { id } = ctx.request.query;
-  let r = ''
+  let r = "";
   console.log(id);
   await getAddress(id)
     .then((res) => {
@@ -77,7 +77,7 @@ router.get("/getAddress", async (ctx, next) => {
 //获取默认地址
 router.get("/getDefaultAddress", async (ctx, next) => {
   let token = ctx.request.header.token;
-  let r = ''
+  let r = "";
   await getDefaultAddress(token)
     .then((res) => {
       console.log(res);
@@ -106,19 +106,35 @@ router.get("/getDefaultAddress", async (ctx, next) => {
 });
 
 //增加地址
-router.post('/addAddress', async (ctx, next) =>{
-  let {token} = ctx.request.header
-  let {name,tel,province,city,county,addressDetail,postalCode,isDefault} = ctx.request.body
+router.post("/addAddress", async (ctx, next) => {
+  let { token } = ctx.request.header;
+  let {
+    name,
+    tel,
+    province,
+    city,
+    county,
+    addressDetail,
+    postalCode,
+    isDefault,
+  } = ctx.request.body;
   console.log(ctx.request.body);
-  let r = ''
-  isDefault = isDefault == 'true' ? 1 : 0
-  if(isDefault){
-    let res = await getDefaultAddress(token)
-    if(res.length){
-      await updateDefaultAddress(res[0].id)
-    }
+  let r = "";
+  isDefault = isDefault == "true" ? 1 : 0;
+  if (isDefault) {
+    await updateDefaultAddress(token);
   }
-  let res = await addAddress([token,name,tel,province,city,county,addressDetail,postalCode,isDefault])
+  let res = await addAddress([
+    token,
+    name,
+    tel,
+    province,
+    city,
+    county,
+    addressDetail,
+    postalCode,
+    isDefault,
+  ]);
   if (res.affectedRows != 0) {
     r = "ok";
     ctx.body = {
@@ -134,41 +150,41 @@ router.post('/addAddress', async (ctx, next) =>{
       message: "添加失败",
     };
   }
-})
+});
 
 //获取所有地址
-router.get('/getAllAddress', async (ctx, next) =>{
-  let {token} = ctx.request.header
+router.get("/getAllAddress", async (ctx, next) => {
+  let { token } = ctx.request.header;
   await getAllAddress(token)
-  .then((res) => {
-    let r = "";
-    console.log(res);
-    if (res.length) {
-      r = "ok";
+    .then((res) => {
+      let r = "";
+      console.log(res);
+      if (res.length) {
+        r = "ok";
+        ctx.body = {
+          code: "80000",
+          data: res,
+          message: "获取成功",
+        };
+      } else {
+        r = "error";
+        ctx.body = {
+          code: "80002",
+          data: r,
+          message: "获取错误",
+        };
+      }
+    })
+    .catch((err) => {
       ctx.body = {
-        code: "80000",
-        data: res,
-        message: "获取成功",
+        code: "80004",
+        data: err,
       };
-    } else {
-      r = "error";
-      ctx.body = {
-        code: "80002",
-        data: r,
-        message: "获取错误",
-      };
-    }
-  })
-  .catch((err) => {
-    ctx.body = {
-      code: "80004",
-      data: err,
-    };
-  });
-})
+    });
+});
 
 //删除地址
-router.delete('/deleteAddress', async (ctx, next) =>{
+router.delete("/deleteAddress", async (ctx, next) => {
   let id = ctx.request.query.id;
   console.log(id);
   await deleteAddress(id)
@@ -192,36 +208,62 @@ router.delete('/deleteAddress', async (ctx, next) =>{
         data: err,
       };
     });
-})
+});
 
 //修改地址
-router.post('/editAddress', async (ctx, next) =>{
-  let {id,name,tel,province,city,county,addressDetail,postalCode,isDefault} = ctx.request.body
-  console.log(ctx.request.body);
-  let r = ''
-  isDefault = isDefault == 'true' ? 1 : 0
-  await editAddress([name,tel,province,city,county,addressDetail,postalCode,isDefault,id]).then(res =>{
-    if (res.affectedRows) {
-    r = "ok";
-    ctx.body = {
-      code: "80000",
-      data: r,
-      message: "修改成功",
-    };
-  } else {
-    r = "error";
-    ctx.body = {
-      code: "80002",
-      data: r,
-      message: "修改失败",
-    };
-  }
-  }).catch(err =>{
-    ctx.body = {
-      code: "80004",
-      data: err,
-    };
-  })
+router.post("/editAddress", async (ctx, next) => {
+  let {
+    id,
+    name,
+    tel,
+    province,
+    city,
+    county,
+    addressDetail,
+    postalCode,
+    isDefault,
+  } = ctx.request.body;
+  let { token } = ctx.request.header;
 
-})
+  console.log(ctx.request.body);
+  let r = "";
+  isDefault = isDefault == "true" ? 1 : 0;
+  if (isDefault) {
+    await updateDefaultAddress(token);
+  }
+  await editAddress([
+    name,
+    tel,
+    province,
+    city,
+    county,
+    addressDetail,
+    postalCode,
+    isDefault,
+    id,
+  ])
+    .then((res) => {
+      if (res.affectedRows) {
+        r = "ok";
+        ctx.body = {
+          code: "80000",
+          data: r,
+          message: "修改成功",
+        };
+      } else {
+        r = "error";
+        ctx.body = {
+          code: "80002",
+          data: r,
+          message: "修改失败",
+        };
+      }
+    })
+    .catch((err) => {
+      ctx.body = {
+        code: "80004",
+        data: err,
+      };
+    });
+});
 module.exports = router;

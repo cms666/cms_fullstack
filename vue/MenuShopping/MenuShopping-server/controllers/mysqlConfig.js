@@ -144,9 +144,11 @@ let addAddress = function (value) {
 
 //修改默认地址
 let updateDefaultAddress = function (id){
-  let _sql = `update address set isDefault=0 where id=${id}`;
+  let _sql = `update address set isDefault=0 where userid=${id} and isDefault=1`;
   return allServices.query(_sql);
 }
+
+//
 
 //获取所有地址
 let getAllAddress = function (id){

@@ -1,5 +1,5 @@
 <template>
-  <sheader :name="'生成订单'" :back="from" />
+  <sheader :name="'生成订单'" :back="'/cart'" />
   <div class="main">
     <div class="address" @click="goToAddress">
       <div class="tip" v-if="!hasAddress">请选择地址</div>
@@ -15,7 +15,7 @@
       </div>
       <van-icon name="arrow" class="arrow-icon" />
     </div>
-    <orderlist :orderDetailList="materialList"/>
+    <orderlist :orderDetailList="materialList" />
     <div class="create-order">
       <i>&nbsp;</i>
       <div class="total">
@@ -29,7 +29,6 @@
       <van-button
         hairline
         round
-        type="small"
         color="#14c965"
         class="btnsize"
         @click.stop="goToAccount"
@@ -70,9 +69,9 @@ import { useStore } from "vuex";
 export default {
   components: {
     sheader,
-    orderlist
+    orderlist,
   },
-  setup(){
+  setup() {
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
@@ -152,12 +151,12 @@ export default {
       console.log(res);
       if (res.code == "80000") {
         store.dispatch("updateCart");
-        localStorage.removeItem('account')
+        console.log('updateCart');
+        localStorage.removeItem("account");
 
         Toast.success(res.message);
         setTimeout(() => {
-          router.push({path:'/orderdetail',query:{id:obj.id}})
-
+          router.push({ path: "/orderdetail", query: { id: obj.id } });
         }, 500);
       } else {
         Toast.fail(res.message);
@@ -166,7 +165,7 @@ export default {
 
     //取消支付
     const cancelPay = async () => {
-            let obj = {};
+      let obj = {};
       obj.id = Date.now();
       obj.address =
         state.address.province +
@@ -179,12 +178,12 @@ export default {
       let res = await createOrder(obj);
       console.log(res);
       if (res.code == "80000") {
-        Toast('取消支付')
+        Toast("取消支付");
         store.dispatch("updateCart");
-        localStorage.removeItem('account')
+        localStorage.removeItem("account");
         setTimeout(() => {
-          router.push({path:'/orderdetail',query:{id:obj.id}})
-        }, 500)
+          router.push({ path: "/orderdetail", query: { id: obj.id } });
+        }, 500);
       }
     };
     return {
@@ -235,7 +234,7 @@ export default {
     width: 100%;
     .fj();
     .total {
-      margin-left: 3.5rem;
+      margin-left: 2rem;
       .num {
         color: #999;
       }
@@ -251,7 +250,8 @@ export default {
     }
     .btnsize {
       margin-left: 0.2rem;
-      width: 2rem;
+      width: 3rem;
+      height: 1rem;
     }
   }
 }
