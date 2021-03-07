@@ -9,12 +9,16 @@ exports.main = async (event, context) => {
   const openId = event.userInfo.openId
   const item = event.item
   //
+  const getUserInfo = await db.collection('userDD').where({
+    openId: openId
+  }).get()
+  // return getUserInfo
   if (item === '搜索') {
     const value = event.value
     // return value
     const getOrderDD = await db.collection('orderDD').orderBy('time', 'asc').where({
-      title:db.RegExp({
-        regexp: '.*' + value + '.*' ,
+      title: db.RegExp({
+        regexp: '.*' + value + '.*',
         options: 'i'
       })
     }).get()
@@ -22,20 +26,21 @@ exports.main = async (event, context) => {
     const getUser = await db.collection('userDD').get()
     let data = []
     for (let fd of getOrderDD.data) {
-      if (!fd.orderTaking && fd.time > (Date.now() + 8 * 3600000)&& !fd.remove) {
+      if (!fd.orderTaking && fd.time > (Date.now() + 8 * 3600000) && !fd.remove && fd.university == getUserInfo.data[0].university) {
         let obj = {}
-        obj['id'] = fd._id
-        obj['classify'] = fd.classify
-        obj['desc'] = fd.desc
-        obj['price'] = fd.price
-        obj['time'] = timestampToTime(fd.time)
-        obj['title'] = fd.title
         for (let user of getUser.data) {
           if (user.openId === fd.publisher) {
             obj['avatar'] = user.avatarUrl,
               obj['nickname'] = user.nickName
           }
         }
+        obj['id'] = fd._id
+        obj['classify'] = fd.classify
+        obj['desc'] = fd.desc
+        obj['price'] = fd.price
+        obj['time'] = timestampToTime(fd.time)
+        obj['title'] = fd.title
+
         data.push(obj)
       }
     }
@@ -112,7 +117,7 @@ exports.main = async (event, context) => {
     const getUser = await db.collection('userDD').get()
     let data = []
     for (let fd of getOrderDD.data) {
-      if (!fd.orderTaking && fd.time > (Date.now() + 8 * 3600000) && !fd.remove) {
+      if (!fd.orderTaking && fd.time > (Date.now() + 8 * 3600000) && !fd.remove && getUserInfo.data[0].university == fd.university) {
         let obj = {}
         obj['id'] = fd._id
         obj['classify'] = fd.classify

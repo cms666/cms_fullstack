@@ -31,6 +31,3 @@ page{
 .container .item:first-child{
   height: 200rpx;
 }
-.container .item:last-child{
-  justify-content: center;
-}
