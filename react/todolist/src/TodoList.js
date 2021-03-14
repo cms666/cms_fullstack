@@ -1,52 +1,34 @@
-import React, { Component, Fragment } from "react";
-import TodoItem from "./TodoItem";
+import React, { Component } from "react";
+import "antd/dist/antd.css";
+// import TodoItem from "./TodoItem";
+import { Input, Button, List } from "antd";
+import store from './store'
+
 class TodoList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      inputValue: "",
-      list: [],
-    };
+    console.log(store.getState());
+    this.state=store.getState()
   }
   render() {
     return (
-      <Fragment>
+      <div style={{ marginTop: "10px", marginLeft: "10px" }}>
         <div>
-          <label htmlFor="inputd">dianji</label>
-          <input
-            id="inputd"
+          <Input
             value={this.state.inputValue}
-            onChange={this.handleInputChange.bind(this)}
-          ></input>
-          <button onClick={this.handleClick.bind(this)}>提交</button>
+            placeholder="todo info"
+            style={{ width: "300px", marginRight: "10px" }}
+          />
+          <Button type="primary">提交</Button>
         </div>
-        <ul>
-          {this.state.list.map((item, index) => {
-            return <TodoItem item={item} key={index} index={index} deleteItem={this.handleDelete.bind(this)}/>;
-
-            /* <li key={index} onClick={this.handleDelete.bind(this,index)}>{item}</li>*/
-          })}
-        </ul>
-      </Fragment>
+        <List
+          style={{ marginTop: "10px", width: "300px" }}
+          bordered
+          dataSource={this.state.list}
+          renderItem={(item) => <List.Item>{item}</List.Item>}
+        />
+      </div>
     );
-  }
-  handleInputChange(e) {
-    this.setState({
-      inputValue: e.target.value,
-    });
-  }
-  handleClick() {
-    this.setState({
-      list: [...this.state.list, this.state.inputValue],
-      inputValue: "",
-    });
-  }
-  handleDelete(index) {
-    const list = [...this.state.list];
-    list.splice(index, 1);
-    this.setState({
-      list: list,
-    });
   }
 }
 
