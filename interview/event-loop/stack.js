@@ -27,7 +27,7 @@
 // a++
 // console.log('1', a) // -> '1' 1
 
-let a = 0
+/* let a = 0
 let b = async () => {
   await (a = 10)
   console.log('2', a) // -> '2' 10
@@ -35,3 +35,22 @@ let b = async () => {
 b()
 
 console.log('1', a) // -> '1' 1
+ */
+
+setTimeout(function () {
+  console.log(1);
+}, 0);
+new Promise(function (resolve, reject) {
+  console.log(2);
+  resolve();
+})
+  .then(function () {
+    console.log(3);
+  })
+  .then(function () {
+    console.log(4);
+  });
+process.nextTick(function () {
+  console.log(5);
+});
+console.log(6);
